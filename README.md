@@ -15,4 +15,4 @@ npm run preview
 ```
 
 ## 部署（AWS Amplify Hosting）
-连接 GitHub 仓库 → Amplify → Hosting → Connect app → 构建输出目录 `dist/`。
+连接 GitHub 仓库 → Amplify → Hosting → Connect app → 构建输出目录 `dist/`。# Social-Media-Academy
