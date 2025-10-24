@@ -99,3 +99,23 @@ body { margin: 0; font-family: ui-sans-serif, system-ui, -apple-system, "Segoe U
   position: absolute; inset: 0;
   background: radial-gradient(600px 120px at -10% 0%, rgba(255,255,255,.25), transparent 60%);
   opacity: 0; tran
+/* 统一展示比例：卡片顶部一个 16:9 画布，Logo/横幅图片以 contain 自适应 */
+.brand-media {
+  width: 100%;
+  aspect-ratio: 16 / 9;           /* 统一比例 */
+  border-radius: 12px;
+  border: 1px solid var(--stroke);
+  background: var(--card);
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+}
+
+.brand-img {
+  max-width: 88%;
+  max-height: 88%;
+  object-fit: contain;            /* 不裁剪，完整显示 */
+  display: block;
+  pointer-events: none;
+  user-select: none;
+}
