@@ -1,133 +1,77 @@
-import React, { useState } from 'react'
-
-const lessons = [
-  {
-    id: 'ig',
-    platform: 'Instagram',
-    title: '创建账号并设置双重验证',
-    steps: [
-      { t: '在应用商店搜索 Instagram，安装并注册。', imgText: '打开商店 → 搜索 Instagram → 安装 → 注册' },
-      { t: '填写邮箱/手机并设置强密码（≥12位，含大小写与数字）。', imgText: '邮箱/手机号 + 强密码(≥12)' },
-      { t: '设置 → Security → Two‑Factor Authentication（短信或验证器）。', imgText: 'Settings → Security → 2FA' }
-    ]
-  },
-  {
-    id: 'tiktok',
-    platform: 'TikTok',
-    title: '隐私与家长监护(青少年)设置',
-    steps: [
-      { t: 'Profile → 菜单 → Settings and privacy。', imgText: 'Profile → Menu → Settings & privacy' },
-      { t: 'Privacy 中设为私密账号并限制陌生人评论/私信。', imgText: 'Privacy: Private + Restrict DMs/Comments' },
-      { t: '开启 Family Pairing，设置使用时长和内容过滤。', imgText: 'Family Pairing: Screen Time + Filter' }
-    ]
-  },
-  {
-    id: 'x',
-    platform: 'X (Twitter)',
-    title: '登录安全与可见性',
-    steps: [
-      { t: 'Settings → Security → 2FA（App 验证优先）。', imgText: 'Settings → Security → 2FA (App)' },
-      { t: 'Privacy and safety → Audience（Everyone/Followers）。', imgText: 'Privacy: Audience' }
-    ]
-  }
-]
+import React from 'react'
+import { BrowserRouter, Routes, Route, Link } from 'react-router-dom'
+import Instagram from './pages/Instagram.jsx'
+import TikTok from './pages/TikTok.jsx'
+import YouTube from './pages/YouTube.jsx'
+import Facebook from './pages/Facebook.jsx'
+import Discord from './pages/Discord.jsx'
+import Slang from './pages/Slang.jsx'
 
 export default function App() {
-  const [expanded, setExpanded] = useState(null)
-  const [showImages, setShowImages] = useState(false)
-
   return (
-    <div style={{ fontFamily: 'system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial', padding: 24, maxWidth: 980, margin: '0 auto' }}>
-      <header style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 24 }}>
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/instagram" element={<Instagram />} />
+        <Route path="/tiktok" element={<TikTok />} />
+        <Route path="/youtube" element={<YouTube />} />
+        <Route path="/facebook" element={<Facebook />} />
+        <Route path="/discord" element={<Discord />} />
+        <Route path="/slang" element={<Slang />} />
+        <Route path="*" element={<NotFound />} />
+      </Routes>
+    </BrowserRouter>
+  )
+}
+
+function Home() {
+  return (
+    <div style={container}>
+      <header style={headerRow}>
         <div>
           <h1 style={{ margin: 0, fontSize: 28 }}>Social Media Academy</h1>
           <p style={{ margin: '4px 0', opacity: .7 }}>文字优先教学 · 看不懂再看图解</p>
         </div>
-        <button onClick={() => setShowImages(v => !v)} style={btnSecondary}>
-          {showImages ? '隐藏图解' : '看不懂？看图解'}
-        </button>
       </header>
 
-      <main style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', gap: 16 }}>
-        {lessons.map(lesson => (
-          <div key={lesson.id} style={card}>
-            <div style={{ padding: 16, borderBottom: '1px solid #e5e7eb' }}>
-              <h3 style={{ margin: '0 0 4px 0', fontSize: 18 }}>{lesson.title}</h3>
-              <div style={{ fontSize: 12, opacity: .7 }}>{lesson.platform}</div>
-            </div>
-
-            <div style={{ padding: 16 }}>
-              <button
-                style={btnPrimary}
-                onClick={() => setExpanded(expanded === lesson.id ? null : lesson.id)}
-              >
-                {expanded === lesson.id ? '收起步骤' : '查看步骤'}
-              </button>
-
-              {expanded === lesson.id && (
-                <div style={{ marginTop: 12 }}>
-                  {lesson.steps.map((s, i) => (
-                    <div key={i} style={stepBox}>
-                      <div style={{ fontWeight: 600, marginBottom: 6 }}>步骤 {i + 1}</div>
-                      <div style={{ marginBottom: 8 }}>{s.t}</div>
-                      {showImages && (
-                        <div style={diagramBox}>
-                          <div style={{ padding: 12, textAlign: 'center' }}>{s.imgText}</div>
-                        </div>
-                      )}
-                    </div>
-                  ))}
-                </div>
-              )}
-            </div>
-          </div>
-        ))}
-      </main>
-
-      <section style={{ marginTop: 24 }}>
-        <h2 style={{ fontSize: 20, marginBottom: 8 }}>统一集成（未来可接各平台 API）</h2>
-        <p style={{ marginTop: 0, opacity: .8 }}>此处将来用于绑定 Instagram / TikTok / X / YouTube 等账号，做统一操作与教学。</p>
-      </section>
+      <nav style={grid}>
+        <Tile to="/instagram" title="Instagram 教程" desc="账号设置 · 安全 · 内容基础" />
+        <Tile to="/tiktok"    title="TikTok 教程"     desc="隐私 · 家长监护 · 内容基础" />
+        <Tile to="/youtube"   title="YouTube 教程"    desc="频道创建 · 上传 · 合规" />
+        <Tile to="/facebook"  title="Facebook 教程"   desc="隐私 · 页面管理 · 社群" />
+        <Tile to="/discord"   title="Discord 教程"    desc="加入服务器 · 频道 · 语音与安全" />
+        <Tile to="/slang"     title="网络用语词典"     desc="常见缩写与梗，友好解释" />
+      </nav>
     </div>
   )
 }
 
-const card = {
-  border: '1px solid #e5e7eb',
-  borderRadius: 14,
-  overflow: 'hidden',
-  background: '#fff',
-  boxShadow: '0 1px 2px rgba(0,0,0,.04)'
+function NotFound() {
+  return (
+    <div style={container}>
+      <h2>页面不存在</h2>
+      <p><Link to="/">回到首页</Link></p>
+    </div>
+  )
 }
 
-const btnPrimary = {
-  background: 'black',
-  color: 'white',
-  border: 'none',
-  padding: '10px 14px',
-  borderRadius: 10,
-  cursor: 'pointer'
+function Tile({ to, title, desc }) {
+  return (
+    <Link to={to} style={tile}>
+      <div>
+        <div style={{ fontSize: 18, fontWeight: 700, marginBottom: 6 }}>{title}</div>
+        <div style={{ opacity: .75 }}>{desc}</div>
+      </div>
+      <span aria-hidden>→</span>
+    </Link>
+  )
 }
 
-const btnSecondary = {
-  background: 'white',
-  color: 'black',
-  border: '1px solid #e5e7eb',
-  padding: '10px 14px',
-  borderRadius: 10,
-  cursor: 'pointer'
-}
-
-const stepBox = {
-  border: '1px solid #e5e7eb',
-  borderRadius: 12,
-  padding: 12,
-  marginBottom: 12,
-  background: '#fafafa'
-}
-
-const diagramBox = {
-  border: '1px dashed #d1d5db',
-  borderRadius: 12,
-  background: 'white'
+const container = { fontFamily: 'system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial', padding: 24, maxWidth: 980, margin: '0 auto' }
+const headerRow = { display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 24 }
+const grid = { display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(260px, 1fr))', gap: 16 }
+const tile = {
+  display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+  border: '1px solid #e5e7eb', borderRadius: 14, padding: 16, textDecoration: 'none',
+  color: 'inherit', background: '#fff', boxShadow: '0 1px 2px rgba(0,0,0,.04)'
 }
