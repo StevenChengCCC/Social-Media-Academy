@@ -1,7 +1,7 @@
 import React from 'react'
 import { BrowserRouter, Routes, Route, Link } from 'react-router-dom'
 
-// 页面（保持你之前已创建的文件名）
+// 你已有的页面
 import Instagram from './pages/Instagram.jsx'
 import TikTok from './pages/TikTok.jsx'
 import YouTube from './pages/YouTube.jsx'
@@ -9,9 +9,12 @@ import Facebook from './pages/Facebook.jsx'
 import Discord from './pages/Discord.jsx'
 import Slang from './pages/Slang.jsx'
 
+// 新增：小游戏页
+import Play from './pages/Play.jsx'
+
 import './app.css'
 
-// 本地图片（文件名需与 assets 中一致）
+// 本地图片
 import LogoSlang from './assets/slang_dictionary.png'
 import LogoDiscord from './assets/discord-1024x576.jpg'
 import LogoYouTube from './assets/youtubeLogo-1.png'
@@ -30,6 +33,7 @@ export default function App() {
         <Route path="/facebook" element={<Facebook />} />
         <Route path="/discord" element={<Discord />} />
         <Route path="/slang" element={<Slang />} />
+        <Route path="/play" element={<Play />} /> {/* 新增 */}
         <Route path="*" element={<NotFound />} />
       </Routes>
     </BrowserRouter>
@@ -39,14 +43,13 @@ export default function App() {
 function Home() {
   return (
     <div className="page">
-      {/* 纯文本主标题 */}
       <header className="hero">
         <h1 className="title" aria-label="social media academy">
           <span>social media academy</span>
         </h1>
       </header>
 
-      {/* 横向信息卡（适配横图） */}
+      {/* 横向信息卡 */}
       <nav className="list">
         <WideTile to="/slang"     img={LogoSlang}     title="SlangDiction" desc="网络用语词典 · 搜索 / 敏感提示" />
         <WideTile to="/discord"   img={LogoDiscord}   title="Discord"      desc="服务器 · 频道 · 语音与安全" />
@@ -55,6 +58,11 @@ function Home() {
         <WideTile to="/facebook"  img={LogoFacebook}  title="Facebook"     desc="隐私 · 页面管理 · 社群" />
         <WideTile to="/instagram" img={LogoInstagram} title="Instagram"    desc="账号设置 · 安全 · 内容基础" />
       </nav>
+
+      {/* 这里是最底部的小链接 */}
+      <div className="play-link">
+        <Link to="/play" className="play-cta">🎮 去玩一个小小的粒子模拟游戏</Link>
+      </div>
 
       <footer className="footer">
         <span>&copy; {new Date().getFullYear()} social media academy</span>
