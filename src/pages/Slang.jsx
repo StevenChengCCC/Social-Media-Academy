@@ -147,7 +147,6 @@ const itemsRaw = [
 
   // —— 可能含成年/脏话/约会暗示（点击后显示） ——
   { k: 'AF', v: 'As ****：非常、超级（脏话加强语气）', sensitive: true, category: 'explicit' },
-  { k: 'Boujee', v: '显摆富有/装富（或写作 bouji）' },
   { k: 'Bruh', v: '兄弟/无语的语气词' },
   { k: 'Bae', v: '对象/另一半（baby 或 before anyone else）' },
   { k: 'Basic', v: '平庸/跟风' },

@@ -6,6 +6,7 @@ import YouTube from './pages/YouTube.jsx'
 import Facebook from './pages/Facebook.jsx'
 import Discord from './pages/Discord.jsx'
 import Slang from './pages/Slang.jsx'
+import './app.css'
 
 export default function App() {
   return (
@@ -26,52 +27,50 @@ export default function App() {
 
 function Home() {
   return (
-    <div style={container}>
-      <header style={headerRow}>
-        <div>
-          <h1 style={{ margin: 0, fontSize: 28 }}>Social Media Academy</h1>
-          <p style={{ margin: '4px 0', opacity: .7 }}>文字优先教学 · 看不懂再看图解</p>
-        </div>
+    <div className="page">
+      {/* 纯标题区域 */}
+      <header className="hero">
+        <h1 className="title" aria-label="social media academy">
+          <span>social media academy</span>
+        </h1>
       </header>
 
-      <nav style={grid}>
-        <Tile to="/instagram" title="Instagram 教程" desc="账号设置 · 安全 · 内容基础" />
-        <Tile to="/tiktok"    title="TikTok 教程"     desc="隐私 · 家长监护 · 内容基础" />
-        <Tile to="/youtube"   title="YouTube 教程"    desc="频道创建 · 上传 · 合规" />
-        <Tile to="/facebook"  title="Facebook 教程"   desc="隐私 · 页面管理 · 社群" />
-        <Tile to="/discord"   title="Discord 教程"    desc="加入服务器 · 频道 · 语音与安全" />
-        <Tile to="/slang"     title="网络用语词典"     desc="常见缩写与梗，友好解释" />
+      {/* 导航网格 */}
+      <nav className="grid">
+        <Tile to="/instagram" emoji="📸" title="Instagram" desc="账号·安全·内容基础" />
+        <Tile to="/tiktok"    emoji="🎵" title="TikTok"    desc="隐私·家长监护·创作" />
+        <Tile to="/youtube"   emoji="▶️" title="YouTube"   desc="频道·上传·合规" />
+        <Tile to="/facebook"  emoji="👥" title="Facebook"  desc="隐私·页面·社群" />
+        <Tile to="/discord"   emoji="💬" title="Discord"   desc="服务器·频道·语音" />
+        <Tile to="/slang"     emoji="🔎" title="网络用语"   desc="词典·搜索·敏感提示" />
       </nav>
+
+      {/* 页脚（可选） */}
+      <footer className="footer">
+        <span>&copy; {new Date().getFullYear()} social media academy</span>
+      </footer>
     </div>
+  )
+}
+
+function Tile({ to, emoji, title, desc }) {
+  return (
+    <Link to={to} className="tile">
+      <div className="tile-head">
+        <span className="tile-emoji" aria-hidden>{emoji}</span>
+        <div className="tile-title">{title}</div>
+      </div>
+      <div className="tile-desc">{desc}</div>
+      <div className="tile-arrow" aria-hidden>→</div>
+    </Link>
   )
 }
 
 function NotFound() {
   return (
-    <div style={container}>
+    <div className="nf">
       <h2>页面不存在</h2>
-      <p><Link to="/">回到首页</Link></p>
+      <p><Link className="back" to="/">回到首页</Link></p>
     </div>
   )
-}
-
-function Tile({ to, title, desc }) {
-  return (
-    <Link to={to} style={tile}>
-      <div>
-        <div style={{ fontSize: 18, fontWeight: 700, marginBottom: 6 }}>{title}</div>
-        <div style={{ opacity: .75 }}>{desc}</div>
-      </div>
-      <span aria-hidden>→</span>
-    </Link>
-  )
-}
-
-const container = { fontFamily: 'system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial', padding: 24, maxWidth: 980, margin: '0 auto' }
-const headerRow = { display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 24 }
-const grid = { display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(260px, 1fr))', gap: 16 }
-const tile = {
-  display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-  border: '1px solid #e5e7eb', borderRadius: 14, padding: 16, textDecoration: 'none',
-  color: 'inherit', background: '#fff', boxShadow: '0 1px 2px rgba(0,0,0,.04)'
 }
