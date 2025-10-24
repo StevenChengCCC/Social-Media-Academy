@@ -1,14 +1,17 @@
 import React from 'react'
 import { BrowserRouter, Routes, Route, Link } from 'react-router-dom'
+
+// 页面（保持你之前已创建的文件名）
 import Instagram from './pages/Instagram.jsx'
 import TikTok from './pages/TikTok.jsx'
 import YouTube from './pages/YouTube.jsx'
 import Facebook from './pages/Facebook.jsx'
 import Discord from './pages/Discord.jsx'
 import Slang from './pages/Slang.jsx'
+
 import './app.css'
 
-// 导入本地图片资源（Vite 会处理）
+// 本地图片（文件名需与 assets 中一致）
 import LogoSlang from './assets/slang_dictionary.png'
 import LogoDiscord from './assets/discord-1024x576.jpg'
 import LogoYouTube from './assets/youtubeLogo-1.png'
@@ -36,20 +39,21 @@ export default function App() {
 function Home() {
   return (
     <div className="page">
+      {/* 纯文本主标题 */}
       <header className="hero">
         <h1 className="title" aria-label="social media academy">
           <span>social media academy</span>
         </h1>
       </header>
 
-      {/* 统一比例的图片卡片 */}
-      <nav className="grid">
-        <ImgTile to="/slang"    img={LogoSlang}    title="SlangDiction"  desc="网络用语词典 · 搜索/敏感提示" />
-        <ImgTile to="/discord"  img={LogoDiscord}  title="Discord"       desc="服务器 · 频道 · 语音与安全" />
-        <ImgTile to="/youtube"  img={LogoYouTube}  title="YouTube"       desc="频道 · 上传 · 合规" />
-        <ImgTile to="/tiktok"   img={LogoTikTok}   title="TikTok"        desc="隐私 · 家长监护 · 创作" />
-        <ImgTile to="/facebook" img={LogoFacebook} title="Facebook"      desc="隐私 · 页面管理 · 社群" />
-        <ImgTile to="/instagram" img={LogoInstagram} title="Instagram"   desc="账号设置 · 安全 · 内容基础" />
+      {/* 横向信息卡（适配横图） */}
+      <nav className="list">
+        <WideTile to="/slang"     img={LogoSlang}     title="SlangDiction" desc="网络用语词典 · 搜索 / 敏感提示" />
+        <WideTile to="/discord"   img={LogoDiscord}   title="Discord"      desc="服务器 · 频道 · 语音与安全" />
+        <WideTile to="/youtube"   img={LogoYouTube}   title="YouTube"      desc="频道 · 上传 · 合规" />
+        <WideTile to="/tiktok"    img={LogoTikTok}    title="TikTok"       desc="隐私 · 家长监护 · 创作" />
+        <WideTile to="/facebook"  img={LogoFacebook}  title="Facebook"     desc="隐私 · 页面管理 · 社群" />
+        <WideTile to="/instagram" img={LogoInstagram} title="Instagram"    desc="账号设置 · 安全 · 内容基础" />
       </nav>
 
       <footer className="footer">
@@ -59,15 +63,16 @@ function Home() {
   )
 }
 
-function ImgTile({ to, img, title, desc }) {
+function WideTile({ to, img, title, desc }) {
   return (
-    <Link to={to} className="tile">
-      {/* 统一比例容器：16:9，图片自适应 contain，不会被裁剪 */}
-      <div className="brand-media">
-        <img src={img} alt={`${title} logo`} className="brand-img" loading="lazy" />
+    <Link to={to} className="tile-wide">
+      <div className="tile-media">
+        <img src={img} alt={`${title} banner`} loading="lazy" />
       </div>
-      <div className="tile-title" style={{ marginTop: 8 }}>{title}</div>
-      <div className="tile-desc">{desc}</div>
+      <div className="tile-body">
+        <div className="tile-title">{title}</div>
+        <div className="tile-desc">{desc}</div>
+      </div>
       <div className="tile-arrow" aria-hidden>→</div>
     </Link>
   )
