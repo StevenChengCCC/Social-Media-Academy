@@ -49,14 +49,14 @@ function Home() {
           <span>social media academy</span>
         </h1>
 
-        {/* 英文简介 */}
+        {/* Site introduction (English) */}
         <p className="subhero">
-          Practical, parent-friendly guides for using social media safely and well.
-          Learn platform-specific privacy settings, screen-time controls, and family
-          supervision—plus a living slang dictionary with sensitive-term protection.
+          Social Media Academy is a simple, parent-friendly handbook for using the internet safely and confidently.
+          We explain each platform in plain language—how to set up privacy, manage screen time, and use family or
+          supervision tools—plus a searchable slang dictionary so you can decode what people mean online.
         </p>
 
-        {/* 快速入口 chips */}
+        {/* Quick links */}
         <div className="chips">
           <Link className="chip" to="/instagram">Instagram</Link>
           <Link className="chip" to="/tiktok">TikTok</Link>
@@ -68,29 +68,59 @@ function Home() {
         </div>
       </header>
 
-      {/* 横向信息卡（横图更自然） */}
+      {/* Wide cards with beginner intros */}
       <nav className="list">
-        <WideTile to="/slang"     img={LogoSlang}     title="SlangDiction" desc="Slang dictionary · search · sensitive-term gate" />
-        <WideTile to="/discord"   img={LogoDiscord}   title="Discord"      desc="Privacy & Safety · server basics · Family Center" />
-        <WideTile to="/youtube"   img={LogoYouTube}   title="YouTube"      desc="Restricted Mode · supervised accounts · comments" />
-        <WideTile to="/tiktok"    img={LogoTikTok}    title="TikTok"       desc="Privacy · Screen Time · Family Pairing" />
-        <WideTile to="/facebook"  img={LogoFacebook}  title="Facebook"     desc="Privacy Checkup · audience controls · your time" />
-        <WideTile to="/instagram" img={LogoInstagram} title="Instagram"    desc="Private account · Quiet Mode · Supervision" />
+        <WideTile
+          to="/slang"
+          img={LogoSlang}
+          title="Slang Dictionary"
+          desc="New to online slang? Meanings can change by culture, age, and context. Search unfamiliar words here—sensitive terms are hidden until you choose to reveal."
+        />
+        <WideTile
+          to="/discord"
+          img={LogoDiscord}
+          title="Discord"
+          desc="Group chat and voice for communities and games. Learn DM-scanning for safety, how to control friend requests, and Family Center supervision for teens."
+        />
+        <WideTile
+          to="/youtube"
+          img={LogoYouTube}
+          title="YouTube"
+          desc="Video platform for watching and posting. Set Restricted Mode, tune recommendations, and use supervised experiences (Kids or supervised accounts)."
+        />
+        <WideTile
+          to="/tiktok"
+          img={LogoTikTok}
+          title="TikTok"
+          desc="Short-form videos and trends. Configure private accounts, comment/DM controls, and manage Screen Time with Family Pairing for parents."
+        />
+        <WideTile
+          to="/facebook"
+          img={LogoFacebook}
+          title="Facebook"
+          desc="Connect with friends, groups, and pages. Run Privacy Checkup, choose audiences for posts, and reduce distractions with Your Time & Quiet Mode."
+        />
+        <WideTile
+          to="/instagram"
+          img={LogoInstagram}
+          title="Instagram"
+          desc="Photos, Reels, and messaging. Make your account private, limit sensitive content, use Quiet Mode, and set up teen Supervision with parents."
+        />
       </nav>
 
-      {/* 新增：LinkedIn 简洁入口（第7个） */}
+      {/* LinkedIn highlight */}
       <div className="highlight">
         <div className="hl-left">
           <div className="hl-dot" />
           <div className="hl-text">
             <b>New • LinkedIn</b>
-            <span> Career-safe settings, public profile control, and feed hygiene. </span>
+            <span> Professional networking for jobs and school—control public profile, data sharing, and notification hygiene.</span>
           </div>
         </div>
         <Link className="hl-link" to="/linkedin">Open guide →</Link>
       </div>
 
-      {/* 最底部小游戏入口（低调） */}
+      {/* Tiny game link */}
       <div className="play-link">
         <Link to="/play" className="play-cta">🎮 Try a tiny physics toy (R-P-S particles)</Link>
       </div>
@@ -101,6 +131,7 @@ function Home() {
     </div>
   )
 }
+
 
 function WideTile({ to, img, title, desc }) {
   return (

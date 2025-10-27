@@ -137,10 +137,15 @@ export default function Slang(){
     <div className="doc">
       <h1>Slang Dictionary</h1>
       <p className="lead">
-        Quick definitions for common internet slang. Sensitive or mature terms are
-        hidden by default and placed at the end of the list. Click to reveal after
-        acknowledging the warning.
+        Meanings online can shift by culture, age group, community, and even gendered contexts. A word that sounds
+        playful to one group may feel rude or explicit to another, and some acronyms carry completely different
+        meanings across platforms or countries.
       </p>
+      <p className="lead">
+        Use the search box below to look up unfamiliar slang quickly. Common terms are listed first (A–Z).
+        Sensitive or mature terms are placed at the end and hidden by default—click to reveal only if you’re comfortable.
+      </p>
+
 
       {/* Search */}
       <div className="slang-search">
