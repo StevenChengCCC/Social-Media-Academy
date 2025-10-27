@@ -20,6 +20,7 @@ import LogoYouTube from './assets/youtubeLogo-1.png'
 import LogoTikTok from './assets/TikTok_logo.svg'
 import LogoFacebook from './assets/Facebook-Logo-2019.png'
 import LogoInstagram from './assets/ins.jpg'
+import LogoLinkedIn from './assets/linkedin.png'
 
 export default function App() {
   return (
@@ -40,23 +41,22 @@ export default function App() {
   )
 }
 
+
+
 function Home() {
   return (
     <div className="page">
-      {/* Hero */}
       <header className="hero fancy">
         <h1 className="title" aria-label="social media academy">
           <span>social media academy</span>
         </h1>
 
-        {/* Site introduction (English) */}
         <p className="subhero">
           Social Media Academy is a simple, parent-friendly handbook for using the internet safely and confidently.
           We explain each platform in plain language—how to set up privacy, manage screen time, and use family or
           supervision tools—plus a searchable slang dictionary so you can decode what people mean online.
         </p>
 
-        {/* Quick links */}
         <div className="chips">
           <Link className="chip" to="/instagram">Instagram</Link>
           <Link className="chip" to="/tiktok">TikTok</Link>
@@ -68,7 +68,6 @@ function Home() {
         </div>
       </header>
 
-      {/* Wide cards with beginner intros */}
       <nav className="list">
         <WideTile
           to="/slang"
@@ -106,21 +105,14 @@ function Home() {
           title="Instagram"
           desc="Photos, Reels, and messaging. Make your account private, limit sensitive content, use Quiet Mode, and set up teen Supervision with parents."
         />
+        <WideTile
+          to="/linkedin"
+          img={LogoLinkedIn}
+          title="LinkedIn"
+          desc="Professional networking for school and jobs. Control your public profile, limit data sharing, and keep notifications focused."
+        />
       </nav>
 
-      {/* LinkedIn highlight */}
-      <div className="highlight">
-        <div className="hl-left">
-          <div className="hl-dot" />
-          <div className="hl-text">
-            <b>New • LinkedIn</b>
-            <span> Professional networking for jobs and school—control public profile, data sharing, and notification hygiene.</span>
-          </div>
-        </div>
-        <Link className="hl-link" to="/linkedin">Open guide →</Link>
-      </div>
-
-      {/* Tiny game link */}
       <div className="play-link">
         <Link to="/play" className="play-cta">🎮 Try a tiny physics toy (R-P-S particles)</Link>
       </div>
