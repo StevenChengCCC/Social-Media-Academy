@@ -33,4 +33,9 @@ export default function Facebook(){
         <h2>Teens & Families</h2>
         <span className="pill">Supervision (Meta)</span>
         <ol className="steps">
-          <li>青少年建议使用 Meta Family Center（与
+          <li>青少年建议使用 Meta Family Center（与 Instagram 共享框架）。Facebook 自身家长功能有限，重点放在受众范围、好友批准与时间管理。</li>
+        </ol>
+      </div>
+    </div>
+  )
+}
