@@ -1,41 +1,42 @@
-import React, { useState } from 'react'
-import { Link } from 'react-router-dom'
+import React from 'react'
 
-export default function Discord() {
-  const [showImages, setShowImages] = useState(false)
+export default function Discord(){
   return (
-    <div style={container}>
-      <header style={row}>
-        <h1 style={{ margin: 0, fontSize: 24 }}>Discord 教程（加入服务器 · 频道 · 语音与安全）</h1>
-        <div>
-          <Link to="/" style={linkBtn}>返回首页</Link>
-          <button onClick={() => setShowImages(v => !v)} style={btnSecondary}>
-            {showImages ? '隐藏图解' : '看不懂？看图解'}
-          </button>
-        </div>
-      </header>
+    <div className="doc">
+      <h1>Discord — Privacy & Family Center</h1>
+      <p className="lead">DM scanning, friend request safety, server privacy, and Family Center supervision for teens.</p>
 
-      <section style={card}>
-        <ul style={{ marginTop: 0 }}>
-          <li><b>注册与登录：</b>下载 Discord 应用或用网页，注册账号并验证邮箱。</li>
-          <li><b>加入服务器：</b>点击左侧“+”→ Join a Server → 输入邀请链接。</li>
-          <li><b>频道与角色：</b>熟悉 #text 文本频道、🔊 语音频道；阅读 <i>#rules</i>，选择/申请角色。</li>
-          <li><b>语音设置：</b>Settings → Voice & Video → 选择麦克风/耳机，开启噪声抑制与按键说话（Push-to-Talk）可选。</li>
-          <li><b>安全与隐私：</b>Settings → Privacy & Safety → 打开“安全过滤”；关闭陌生人私信；启用 2FA 双重验证。</li>
-        </ul>
-        {showImages && (
-          <div style={diagramBox}>
-            <div style={{ padding: 12, textAlign: 'center' }}>流程图占位（后续替换为真机截图）</div>
-          </div>
-        )}
-      </section>
+      <div className="section">
+        <h2>Privacy & Safety</h2>
+        <span className="pill">DM scan</span>
+        <span className="pill">Friend requests</span>
+        <span className="pill">Server privacy</span>
+        <ol className="steps">
+          <li>User Settings → <b>Privacy & Safety</b> → 打开 <b>Keep me safe</b>（扫描私信）。</li>
+          <li><b>Who can send you a friend request</b>：仅 <b>Friends of friends</b> 或关闭 Everyone。</li>
+          <li>服务器 → Server Settings → <b>Moderation</b>：开启年龄/手机验证等级、反垃圾。</li>
+          <li>关闭“允许来自服务器成员的DM”（Server Privacy Settings）。</li>
+        </ol>
+      </div>
+
+      <div className="section">
+        <h2>Time & Distraction</h2>
+        <span className="pill">Do Not Disturb</span>
+        <span className="pill">Mute channels</span>
+        <ol className="steps">
+          <li>状态设为 <b>Do Not Disturb</b>；右击频道/分类 → <b>Mute</b> for X hours / until I turn it back on。</li>
+          <li>移动端可结合 iOS/Android 的“屏幕使用时间/数字健康”限制 Discord 总时长。</li>
+        </ol>
+      </div>
+
+      <div className="section">
+        <h2>Family Center (Teens)</h2>
+        <span className="pill">Activity view</span>
+        <ol className="steps">
+          <li>User Settings → <b>Family Center</b>：家长与青少年互相同意后绑定。</li>
+          <li>家长可看到：加了哪些服务器、加了谁为好友、共用时间段；<b>看不到</b>消息内容。</li>
+        </ol>
+      </div>
     </div>
   )
 }
-
-const container = { fontFamily: 'system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial', padding: 24, maxWidth: 980, margin: '0 auto' }
-const row = { display: 'flex', gap: 12, justifyContent: 'space-between', alignItems: 'center', marginBottom: 16, flexWrap: 'wrap' }
-const btnSecondary = { background: 'white', color: 'black', border: '1px solid #e5e7eb', padding: '10px 14px', borderRadius: 10, cursor: 'pointer', marginLeft: 8 }
-const linkBtn = { border: '1px solid #e5e7eb', padding: '10px 14px', borderRadius: 10, textDecoration: 'none', color: 'black', marginRight: 8 }
-const card = { background:'#fff', border:'1px solid #e5e7eb', borderRadius:14, padding:16 }
-const diagramBox = { border: '1px dashed #d1d5db', borderRadius: 12, background: 'white', marginTop: 12 }

@@ -1,37 +1,36 @@
-import React, { useState } from 'react'
-import { Link } from 'react-router-dom'
+import React from 'react'
 
-export default function Facebook() {
-  const [showImages, setShowImages] = useState(false)
+export default function Facebook(){
   return (
-    <div style={container}>
-      <header style={row}>
-        <h1 style={{ margin: 0, fontSize: 24 }}>Facebook 教程（隐私与页面）</h1>
-        <div>
-          <Link to="/" style={linkBtn}>返回首页</Link>
-          <button onClick={() => setShowImages(v => !v)} style={btnSecondary}>
-            {showImages ? '隐藏图解' : '看不懂？看图解'}
-          </button>
-        </div>
-      </header>
+    <div className="doc">
+      <h1>Facebook — Privacy Checkup</h1>
+      <p className="lead">Privacy Checkup, audience selector, profile locking, face recognition off, and “Your Time on Facebook”.</p>
 
-      <section style={card}>
-        <ul style={{ marginTop: 0 }}>
-          <li><b>隐私设置：</b>Settings & privacy 中配置可见性与好友请求</li>
-          <li><b>页面管理：</b>创建 Page 管理品牌/社团，设置角色与通知</li>
-          <li><b>安全：</b>启用双重验证、检查登录设备</li>
-        </ul>
-        {showImages && (
-          <div style={diagramBox}><div style={{ padding: 12, textAlign: 'center' }}>流程图占位（后续替换为真机截图）</div></div>
-        )}
-      </section>
-    </div>
-  )
-}
+      <div className="section">
+        <h2>Privacy</h2>
+        <span className="pill">Privacy Checkup</span>
+        <span className="pill">Audience selector</span>
+        <span className="pill">Profile Lock</span>
+        <ol className="steps">
+          <li>Menu → <b>Settings & privacy</b> → <b>Privacy Checkup</b>：逐项检查谁能看到信息、登录安全、数据权限。</li>
+          <li>发帖框选择 <b>Audience</b>（Friends/Only me/Custom），默认设为 Friends。</li>
+          <li>个人主页三点 → <b>Lock profile</b>，限制非好友查看历史内容与高清大图。</li>
+          <li>Settings → <b>Face recognition</b> → <b>Off</b>。</li>
+        </ol>
+      </div>
 
-const container = { fontFamily: 'system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial', padding: 24, maxWidth: 980, margin: '0 auto' }
-const row = { display: 'flex', gap: 12, justifyContent: 'space-between', alignItems: 'center', marginBottom: 16, flexWrap: 'wrap' }
-const btnSecondary = { background: 'white', color: 'black', border: '1px solid #e5e7eb', padding: '10px 14px', borderRadius: 10, cursor: 'pointer', marginLeft: 8 }
-const linkBtn = { border: '1px solid #e5e7eb', padding: '10px 14px', borderRadius: 10, textDecoration: 'none', color: 'black', marginRight: 8 }
-const card = { background:'#fff', border:'1px solid #e5e7eb', borderRadius:14, padding:16 }
-const diagramBox = { border: '1px dashed #d1d5db', borderRadius: 12, background: 'white', marginTop: 12 }
+      <div className="section">
+        <h2>Time & Notifications</h2>
+        <span className="pill">Your Time on Facebook</span>
+        <span className="pill">Quiet Mode</span>
+        <ol className="steps">
+          <li>Settings & privacy → <b>Your time on Facebook</b>：查看时长、设置提醒；开启 <b>Quiet Mode</b> 静音通知。</li>
+          <li>通知分类里关闭不必要推送，减少打扰。</li>
+        </ol>
+      </div>
+
+      <div className="section">
+        <h2>Teens & Families</h2>
+        <span className="pill">Supervision (Meta)</span>
+        <ol className="steps">
+          <li>青少年建议使用 Meta Family Center（与
