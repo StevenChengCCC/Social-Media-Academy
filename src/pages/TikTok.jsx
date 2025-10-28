@@ -39,14 +39,6 @@ export default function TikTok(){
           <li>可远程管理：屏幕时间、受限模式、私信权限、搜索与建议、可见度等。</li>
         </ol>
       </div>
-      <div className="section">
-          <h2>Videos</h2>
-          <Video
-            title="TikTok: Enable Family Pairing (2025)"
-            src="https://www.youtube.com/embed/EE2ZeslO0qE"
-          />
-      </div>
-
     </div>
   )
 }

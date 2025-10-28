@@ -36,9 +36,6 @@ export default function YouTube(){
           <li>学龄/青少年：Google Family Link 创建 <b>Supervised Account</b>，选择内容级别（Explore / Explore More / Most of YouTube），控制搜索与时长。</li>
         </ol>
       </div>
-      <Video title="YouTube: Settings → Notifications" src="https://www.youtube.com/embed/ti-wvrGvnHc?si=FFpetD9uC2XPGEs6" />
-      <Video title="YouTube: Settings → Time" src="https://www.youtube.com/embed/BOZNZ6z45ik?si=2L_YaxYX20ItHDEL" />
-
     </div>
   )
 }

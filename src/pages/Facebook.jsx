@@ -36,15 +36,6 @@ export default function Facebook(){
           <li>青少年建议使用 Meta Family Center（与 Instagram 共享框架）。Facebook 自身家长功能有限，重点放在受众范围、好友批准与时间管理。</li>
         </ol>
       </div>
-
-      <div className="section">
-          <h2>Videos</h2>
-          <Video
-            title="Facebook: Privacy Settings / Privacy Checkup (2025)"
-            src="https://www.youtube.com/embed/_9LcxMKWIE4"
-          />
-      </div>
-
     </div>
   )
 }

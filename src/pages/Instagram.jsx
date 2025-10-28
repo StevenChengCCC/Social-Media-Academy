@@ -38,14 +38,6 @@ export default function Instagram(){
           <li>可查看：关注/被关注变化、时间管理设置、举报提醒；家长无法读取私信内容。</li>
         </ol>
       </div>
-      <div className="section">
-         <h2>Videos</h2>
-            <Video
-            title="Instagram: Make Your Account Private (2025)"
-            src="https://www.youtube.com/embed/7qWwI_q6C_c"
-      />
-</div>
-
     </div>
   )
 }

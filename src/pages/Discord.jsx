@@ -37,14 +37,6 @@ export default function Discord(){
           <li>家长可看到：加了哪些服务器、加了谁为好友、共用时间段；<b>看不到</b>消息内容。</li>
         </ol>
       </div>
-      <div className="section">
-        <h2>Videos</h2>
-        <Video
-            title="Discord: Only Allow DMs From Friends (2025)"
-            src="https://www.youtube.com/embed/vQq5qA5X-oA"
-            />
-        </div>
-
     </div>
   )
 }
