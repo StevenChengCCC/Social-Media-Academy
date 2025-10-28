@@ -37,5 +37,17 @@ export default function LinkedIn(){
         </ol>
       </div>
     </div>
+    <div className="section">
+      <h2>Videos</h2>
+      <Video
+        title="LinkedIn: Edit Public Privacy Settings (2025 guide)"
+        src="https://www.youtube.com/embed/QlUaZsK1y2I"
+      />
+      <Video
+        title="LinkedIn: Turn on Private Mode (2025)"
+        src="https://www.youtube.com/embed/Cgg58-rUPLg"
+      />
+    </div>
+
   )
 }

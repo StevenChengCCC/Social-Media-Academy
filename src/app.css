@@ -183,3 +183,8 @@
 .arena-canvas canvas{display:block; width:100%; height:560px}
 .arena-note{margin-top:8px; color:var(--muted); font-size:12px}
 .subhero { font-size: clamp(15px, 1.9vw, 18px); }
+
+.yt{margin:10px 0 16px}
+.yt-frame{position:relative;width:100%;aspect-ratio:16/9;border:1px solid var(--stroke);border-radius:12px;overflow:hidden;background:#000}
+.yt-frame iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
+.yt-caption{font-size:13px;color:var(--muted);margin-top:6px}
