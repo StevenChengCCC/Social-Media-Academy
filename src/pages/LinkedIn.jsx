@@ -36,18 +36,18 @@ export default function LinkedIn(){
           <li>未成年人账户默认限制更严：搜索可见性降低、消息权限收紧。建议保持封面简洁、头像职业化，仅公开必要信息。</li>
         </ol>
       </div>
-    </div>
-    <div className="section">
-      <h2>Videos</h2>
-      <Video
-        title="LinkedIn: Edit Public Privacy Settings (2025 guide)"
-        src="https://www.youtube.com/embed/QlUaZsK1y2I"
-      />
-      <Video
-        title="LinkedIn: Turn on Private Mode (2025)"
-        src="https://www.youtube.com/embed/Cgg58-rUPLg"
-      />
-    </div>
+      <div className="section">
+          <h2>Videos</h2>
+          <Video
+            title="LinkedIn: Edit Public Privacy Settings (2025 guide)"
+            src="https://www.youtube.com/embed/QlUaZsK1y2I"
+          />
+          <Video
+            title="LinkedIn: Turn on Private Mode (2025)"
+            src="https://www.youtube.com/embed/Cgg58-rUPLg"
+          />
+      </div>
 
+    </div>
   )
 }
