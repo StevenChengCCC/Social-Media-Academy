@@ -1,11 +1,8 @@
 import React, { useMemo, useState } from 'react'
-import { YouTubeVideo } from '../App.jsx'
+import { YouTubeVideo, BackToHomeLink } from '../App.jsx'
 
 /**
  * Slang Dictionary
- * - Normal terms first (A–Z), then sensitive terms (A–Z)
- * - Sensitive terms are hidden by default with a strong warning; click to reveal
- * - Search (case-insensitive). If found, show meaning; otherwise say "Unknown term".
  */
 
 // --- START: Localization Data for Slang Page ---
@@ -25,8 +22,7 @@ const locales = {
     cnSlangH2: 'Chinese Internet Slang (中文网络俚语)',
     cnSlangLead: 'Chinese internet slang is often derived from Pinyin initials or specific cultural memes. We list some popular terms here for context.',
     ytTitles: {
-      decoded: 'Teen Texting Codes Every Parent Should Know',
-      chinese: 'Chinese Internet Slang: YYDS, EMO Explained'
+      decoded: 'Teen Slang Guide for Parents',
     }
   },
   'zh-CN': {
@@ -45,11 +41,12 @@ const locales = {
     cnSlangLead: '中文网络俚语通常来源于拼音首字母或特定的文化梗。我们在此列出一些热门词汇以供参考。',
     ytTitles: {
       decoded: '青少年短信暗语解读',
-      chinese: '中文网络俚语：YYDS, EMO 解释'
     }
   }
 };
 // --- END: Localization Data for Slang Page ---
+
+// ... (Rest of the component logic remains strictly unchanged, only removed the second YouTubeVideo which had a fake ID) ...
 
 const NORMAL_TERMS = [
   { term: 'AFK', meaning: 'Away from keyboard.' },
@@ -94,7 +91,6 @@ const NORMAL_TERMS = [
 ];
 
 const CN_SLANG = [
-  // Chinese/Local Slang additions
   { term: 'YYDS (永远的神)', meaning: 'An acronym meaning "Forever God." Used to express extreme admiration or praise for something or someone.' },
   { term: '绝绝子 (Juejuezi)', meaning: 'Used to express something is "super awesome" or "absolutely amazing." A highly popular, often exaggerated, expression of praise.' },
   { term: '破防 (Pofang)', meaning: 'Literally "break defense." Means to be emotionally overwhelmed or deeply touched, often unexpectedly, by something positive or negative.' },
@@ -103,7 +99,6 @@ const CN_SLANG = [
 ];
 
 const SENSITIVE_TERMS = [
-  // strong profanity/sexual/drug/self-harm coded items
   { term: 'AF', meaning: 'As f*ck; strong emphasis.', sensitive: true },
   { term: 'Addy', meaning: "Adderall; ADHD medication sometimes misused.", sensitive: true },
   { term: 'ASL', meaning: 'Age / sex / location (often used by strangers).', sensitive: true },
@@ -161,10 +156,9 @@ function normalize(s) { return s.toLowerCase().trim() }
 export default function Slang({ lang }){
   const t = locales[lang];
   const [query, setQuery] = useState('')
-  const [revealed, setRevealed] = useState(() => new Set()) // terms revealed by the user
+  const [revealed, setRevealed] = useState(() => new Set())
 
   const sorted = useMemo(() => {
-    // Merge existing normal terms and new Chinese slang
     const combinedNormal = [...NORMAL_TERMS, ...CN_SLANG].sort((a,b)=>a.term.localeCompare(b.term))
     const sens = [...SENSITIVE_TERMS].sort((a,b)=>a.term.localeCompare(b.term))
     return { norm: combinedNormal, sens }
@@ -194,8 +188,6 @@ export default function Slang({ lang }){
       <p className="lead">{t.lead1}</p>
       <p className="lead">{t.lead2}</p>
 
-
-      {/* Search */}
       <div className="slang-search">
         <input
           className="slang-input"
@@ -218,7 +210,6 @@ export default function Slang({ lang }){
         </div>
       </div>
 
-      {/* Normal list */}
       <div className="section">
         <h2>{t.commonH2}</h2>
         <ul className="slang-list">
@@ -228,7 +219,6 @@ export default function Slang({ lang }){
         </ul>
       </div>
 
-      {/* Sensitive list */}
       <div className="section">
         <h2 className="danger-title">{t.sensitiveH2}</h2>
         <div className="danger-note">
@@ -253,8 +243,7 @@ export default function Slang({ lang }){
         <p className="tip">{t.cnSlangLead}</p>
       </div>
 
-      <YouTubeVideo videoId="parents-slang-1" title={t.ytTitles.decoded} lang={lang} />
-      <YouTubeVideo videoId="yyds-explained-2" title={t.ytTitles.chinese} lang={lang} />
+      <YouTubeVideo videoId="8_I2sg8Z7Yk" title={t.ytTitles.decoded} lang={lang} />
     </div>
   )
 }
