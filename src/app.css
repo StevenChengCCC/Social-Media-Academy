@@ -283,4 +283,4 @@ body {
 .arena-badges span{background:#ffffffb3; border:1px solid var(--stroke); border-radius:999px; padding:4px 8px;}
 .arena-canvas{border:1px solid var(--stroke); border-radius:16px; overflow:hidden; background:linear-gradient(135deg,#f0f9ff,#eef2ff)}
 .arena-canvas canvas{display:block; width:100%; height:560px}
-.arena-note{margin-top:8px; color:var(--muted); font-size:12px}
+.arena-note{margin-top:8px; color:var(--muted); font-size:12px}}

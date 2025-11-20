@@ -83,13 +83,12 @@ const locales = {
     ytTitle: 'Instagram 隐私与安全设置教程',
   }
 };
-// --- END: Localization Data for Instagram Page ---
-
 export default function Instagram({ lang }){
   const t = locales[lang];
   const s = t.sections;
+
   return (
-    <div className="page">
+    <div className="page theme-instagram">
       <BackToHomeLink lang={lang} />
       <div className="doc instagram">
         <h1>{t.title}</h1>
@@ -139,11 +138,10 @@ export default function Instagram({ lang }){
           </ol>
         </div>
 
-        <YouTubeVideo
-          videoId="n6H3_5eGv0c"
-          title={t.ytTitle}
-          lang={lang}
-        />
+        <YouTubeVideo videoId="n6H3_5eGv0c" title={t.ytTitle} lang={lang} />
+
+
+        <YouTubeVideo videoId="V8P6T6y7q-o" title={lang === 'en' ? "How to set up Supervision on Instagram" : "如何在 Instagram 设置家长监督功能"} lang={lang} />
       </div>
     </div>
   )

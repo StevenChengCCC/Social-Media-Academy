@@ -42,7 +42,6 @@ const locales = {
     },
     ytTitles: {
       family: 'How to Use Discord Family Center With Your Teens',
-      security: 'How To Enable 2FA On Discord - Full Guide',
     }
   },
   'zh-CN': {
@@ -83,11 +82,9 @@ const locales = {
     },
     ytTitles: {
       family: 'Discord 家长控制设置（家庭中心与私信扫描）',
-      security: 'Discord 双重认证设置完整指南',
     }
   }
 };
-// --- END: Localization Data for Discord Page ---
 
 export default function Discord({ lang }){
   const t = locales[lang];
@@ -143,7 +140,6 @@ export default function Discord({ lang }){
         </div>
 
         <YouTubeVideo videoId="jfY3BxsUyvc" title={t.ytTitles.family} lang={lang} />
-        <YouTubeVideo videoId="w6q8HnC6QoQ" title={t.ytTitles.security} lang={lang} />
       </div>
     </div>
   )
