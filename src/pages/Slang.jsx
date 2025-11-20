@@ -46,8 +46,6 @@ const locales = {
 };
 // --- END: Localization Data for Slang Page ---
 
-// ... (Rest of the component logic remains strictly unchanged, only removed the second YouTubeVideo which had a fake ID) ...
-
 const NORMAL_TERMS = [
   { term: 'AFK', meaning: 'Away from keyboard.' },
   { term: 'BFF', meaning: 'Best friends forever.' },
@@ -183,67 +181,70 @@ export default function Slang({ lang }){
   }
 
   return (
-    <div className="doc slang">
-      <h1>{t.title}</h1>
-      <p className="lead">{t.lead1}</p>
-      <p className="lead">{t.lead2}</p>
+    <div className="page">
+      <BackToHomeLink lang={lang} />
+      <div className="doc slang">
+        <h1>{t.title}</h1>
+        <p className="lead">{t.lead1}</p>
+        <p className="lead">{t.lead2}</p>
 
-      <div className="slang-search">
-        <input
-          className="slang-input"
-          placeholder={t.searchPlaceholder}
-          value={query}
-          onChange={(e)=>setQuery(e.target.value)}
-        />
-        <div className="slang-result">
-          {query.trim() ? (
-            hit ? (
-              isSensitive(hit) ? (
-                <SensitiveRow item={hit} revealed={revealed.has(hit.term)} onReveal={()=>reveal(hit.term)} lang={lang} />
+        <div className="slang-search">
+          <input
+            className="slang-input"
+            placeholder={t.searchPlaceholder}
+            value={query}
+            onChange={(e)=>setQuery(e.target.value)}
+          />
+          <div className="slang-result">
+            {query.trim() ? (
+              hit ? (
+                isSensitive(hit) ? (
+                  <SensitiveRow item={hit} revealed={revealed.has(hit.term)} onReveal={()=>reveal(hit.term)} lang={lang} />
+                ) : (
+                  <Row item={hit} />
+                )
               ) : (
-                <Row item={hit} />
+                <i>{t.unknownTerm}</i>
               )
-            ) : (
-              <i>{t.unknownTerm}</i>
-            )
-          ) : <i>{t.typeToSearch}</i>}
+            ) : <i>{t.typeToSearch}</i>}
+          </div>
         </div>
-      </div>
 
-      <div className="section">
-        <h2>{t.commonH2}</h2>
-        <ul className="slang-list">
-          {sorted.norm.map((item)=>(
-            <li key={item.term}><Row item={item} /></li>
-          ))}
-        </ul>
-      </div>
-
-      <div className="section">
-        <h2 className="danger-title">{t.sensitiveH2}</h2>
-        <div className="danger-note">
-          {t.dangerNote}
+        <div className="section">
+          <h2>{t.commonH2}</h2>
+          <ul className="slang-list">
+            {sorted.norm.map((item)=>(
+              <li key={item.term}><Row item={item} /></li>
+            ))}
+          </ul>
         </div>
-        <ul className="slang-list">
-          {sorted.sens.map((item)=>(
-            <li key={item.term}>
-              <SensitiveRow
-                item={item}
-                revealed={revealed.has(item.term)}
-                onReveal={()=>reveal(item.term)}
-                lang={lang}
-              />
-            </li>
-          ))}
-        </ul>
-      </div>
 
-      <div className="section">
-        <h2>{t.cnSlangH2}</h2>
-        <p className="tip">{t.cnSlangLead}</p>
-      </div>
+        <div className="section">
+          <h2 className="danger-title">{t.sensitiveH2}</h2>
+          <div className="danger-note">
+            {t.dangerNote}
+          </div>
+          <ul className="slang-list">
+            {sorted.sens.map((item)=>(
+              <li key={item.term}>
+                <SensitiveRow
+                  item={item}
+                  revealed={revealed.has(item.term)}
+                  onReveal={()=>reveal(item.term)}
+                  lang={lang}
+                />
+              </li>
+            ))}
+          </ul>
+        </div>
 
-      <YouTubeVideo videoId="8_I2sg8Z7Yk" title={t.ytTitles.decoded} lang={lang} />
+        <div className="section">
+          <h2>{t.cnSlangH2}</h2>
+          <p className="tip">{t.cnSlangLead}</p>
+        </div>
+
+        <YouTubeVideo videoId="8_I2sg8Z7Yk" title={t.ytTitles.decoded} lang={lang} />
+      </div>
     </div>
   )
 }

@@ -1,7 +1,6 @@
 import React from 'react'
-import { YouTubeVideo } from '../App.jsx'
+import { YouTubeVideo, BackToHomeLink } from '../App.jsx'
 
-// --- START: Localization Data for YouTube Page ---
 const locales = {
   'en': {
     title: 'YouTube — Restricted & Supervised',
@@ -90,54 +89,57 @@ export default function YouTube({ lang }){
   const t = locales[lang];
   const s = t.sections;
   return (
-    <div className="doc youtube">
-      <h1>{t.title}</h1>
-      <p className="lead">{t.lead}</p>
+    <div className="page">
+      <BackToHomeLink lang={lang} />
+      <div className="doc youtube">
+        <h1>{t.title}</h1>
+        <p className="lead">{t.lead}</p>
 
-      <div className="section">
-        <h2>{s.privacy.h2}</h2>
-        <span className="pill">{s.privacy.pill1}</span>
-        <span className="pill">{s.privacy.pill2}</span>
-        <ol className="steps">
-          <li>{s.privacy.steps[0]}</li>
-          <li>{s.privacy.steps[1]}</li>
-          <li>{s.privacy.steps[2]}</li>
-        </ol>
+        <div className="section">
+          <h2>{s.privacy.h2}</h2>
+          <span className="pill">{s.privacy.pill1}</span>
+          <span className="pill">{s.privacy.pill2}</span>
+          <ol className="steps">
+            <li>{s.privacy.steps[0]}</li>
+            <li>{s.privacy.steps[1]}</li>
+            <li>{s.privacy.steps[2]}</li>
+          </ol>
+        </div>
+
+        <div className="section">
+          <h2>{s.screenTime.h2}</h2>
+          <span className="pill">{s.screenTime.pill1}</span>
+          <span className="pill">{s.screenTime.pill2}</span>
+          <ol className="steps">
+            <li>{s.screenTime.steps[0]}</li>
+            <li>{s.screenTime.steps[1]}</li>
+          </ol>
+        </div>
+
+        <div className="section">
+          <h2>{s.copyright.h2}</h2>
+          <span className="pill">{s.copyright.pill1}</span>
+          <span className="pill">{s.copyright.pill2}</span>
+          <ol className="steps">
+            <li>{s.copyright.steps[0]}</li>
+            <li>{s.copyright.steps[1]}</li>
+            <li>{s.copyright.steps[2]}</li>
+          </ol>
+        </div>
+
+        <div className="section">
+          <h2>{s.supervised.h2}</h2>
+          <span className="pill">{s.supervised.pill1}</span>
+          <span className="pill">{s.supervised.pill2}</span>
+          <ol className="steps">
+            <li>{s.supervised.steps[0]}</li>
+            <li>{s.supervised.steps[1]}</li>
+          </ol>
+        </div>
+
+        <YouTubeVideo videoId="QwlVSphX4Bg" title={t.ytTitles.parental} lang={lang} />
+        <YouTubeVideo videoId="1l_woDlHq30" title={t.ytTitles.copyright} lang={lang} />
       </div>
-
-      <div className="section">
-        <h2>{s.screenTime.h2}</h2>
-        <span className="pill">{s.screenTime.pill1}</span>
-        <span className="pill">{s.screenTime.pill2}</span>
-        <ol className="steps">
-          <li>{s.screenTime.steps[0]}</li>
-          <li>{s.screenTime.steps[1]}</li>
-        </ol>
-      </div>
-
-      <div className="section">
-        <h2>{s.copyright.h2}</h2>
-        <span className="pill">{s.copyright.pill1}</span>
-        <span className="pill">{s.copyright.pill2}</span>
-        <ol className="steps">
-          <li>{s.copyright.steps[0]}</li>
-          <li>{s.copyright.steps[1]}</li>
-          <li>{s.copyright.steps[2]}</li>
-        </ol>
-      </div>
-
-      <div className="section">
-        <h2>{s.supervised.h2}</h2>
-        <span className="pill">{s.supervised.pill1}</span>
-        <span className="pill">{s.supervised.pill2}</span>
-        <ol className="steps">
-          <li>{s.supervised.steps[0]}</li>
-          <li>{s.supervised.steps[1]}</li>
-        </ol>
-      </div>
-
-      <YouTubeVideo videoId="QwlVSphX4Bg" title={t.ytTitles.parental} lang={lang} />
-      <YouTubeVideo videoId="1l_woDlHq30" title={t.ytTitles.copyright} lang={lang} />
     </div>
   )
 }

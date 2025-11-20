@@ -1,5 +1,5 @@
 import React from 'react'
-import { YouTubeVideo } from '../App.jsx'
+import { YouTubeVideo, BackToHomeLink } from '../App.jsx'
 
 // --- START: Localization Data for TikTok Page ---
 const locales = {
@@ -94,58 +94,61 @@ export default function TikTok({ lang }){
   const t = locales[lang];
   const s = t.sections;
   return (
-    <div className="doc tiktok">
-      <h1>{t.title}</h1>
-      <p className="lead">{t.lead}</p>
+    <div className="page">
+      <BackToHomeLink lang={lang} />
+      <div className="doc tiktok">
+        <h1>{t.title}</h1>
+        <p className="lead">{t.lead}</p>
 
-      <div className="section">
-        <h2>{s.privacy.h2}</h2>
-        <span className="pill">{s.privacy.pill1}</span>
-        <span className="pill">{s.privacy.pill2}</span>
-        <span className="pill">{s.privacy.pill3}</span>
-        <ol className="steps">
-          <li>{s.privacy.steps[0]}</li>
-          <li>{s.privacy.steps[1]}</li>
-          <li>{s.privacy.steps[2]}</li>
-          <li>{s.privacy.steps[3]}</li>
-        </ol>
+        <div className="section">
+          <h2>{s.privacy.h2}</h2>
+          <span className="pill">{s.privacy.pill1}</span>
+          <span className="pill">{s.privacy.pill2}</span>
+          <span className="pill">{s.privacy.pill3}</span>
+          <ol className="steps">
+            <li>{s.privacy.steps[0]}</li>
+            <li>{s.privacy.steps[1]}</li>
+            <li>{s.privacy.steps[2]}</li>
+            <li>{s.privacy.steps[3]}</li>
+          </ol>
+        </div>
+
+        <div className="section">
+          <h2>{s.contentSafety.h2}</h2>
+          <span className="pill">{s.contentSafety.pill1}</span>
+          <span className="pill">{s.contentSafety.pill2}</span>
+          <ol className="steps">
+            <li>{s.contentSafety.steps[0]}</li>
+            <li>{s.contentSafety.steps[1]}</li>
+            <li>{s.contentSafety.steps[2]}</li>
+          </ol>
+        </div>
+
+        <div className="section">
+          <h2>{s.screenTime.h2}</h2>
+          <span className="pill">{s.screenTime.pill1}</span>
+          <span className="pill">{s.screenTime.pill2}</span>
+          <span className="pill">{s.screenTime.pill3}</span>
+          <ol className="steps">
+            <li>{s.screenTime.steps[0]}</li>
+            <li>{s.screenTime.steps[1]}</li>
+            <li>{s.screenTime.steps[2]}</li>
+          </ol>
+        </div>
+
+        <div className="section">
+          <h2>{s.pairing.h2}</h2>
+          <span className="pill">{s.pairing.pill1}</span>
+          <ol className="steps">
+            <li>{s.pairing.steps[0]}</li>
+            <li>{s.pairing.steps[1]}</li>
+          </ol>
+        </div>
+
+        {/* Updated Videos */}
+        <YouTubeVideo videoId="j1x-kW3mWXk" title={t.ytTitles.pairing} lang={lang} />
+        <YouTubeVideo videoId="vpKksQLxfaU" title={t.ytTitles.safety} lang={lang} />
       </div>
-
-      <div className="section">
-        <h2>{s.contentSafety.h2}</h2>
-        <span className="pill">{s.contentSafety.pill1}</span>
-        <span className="pill">{s.contentSafety.pill2}</span>
-        <ol className="steps">
-          <li>{s.contentSafety.steps[0]}</li>
-          <li>{s.contentSafety.steps[1]}</li>
-          <li>{s.contentSafety.steps[2]}</li>
-        </ol>
-      </div>
-
-      <div className="section">
-        <h2>{s.screenTime.h2}</h2>
-        <span className="pill">{s.screenTime.pill1}</span>
-        <span className="pill">{s.screenTime.pill2}</span>
-        <span className="pill">{s.screenTime.pill3}</span>
-        <ol className="steps">
-          <li>{s.screenTime.steps[0]}</li>
-          <li>{s.screenTime.steps[1]}</li>
-          <li>{s.screenTime.steps[2]}</li>
-        </ol>
-      </div>
-
-      <div className="section">
-        <h2>{s.pairing.h2}</h2>
-        <span className="pill">{s.pairing.pill1}</span>
-        <ol className="steps">
-          <li>{s.pairing.steps[0]}</li>
-          <li>{s.pairing.steps[1]}</li>
-        </ol>
-      </div>
-
-      {/* Updated Videos */}
-      <YouTubeVideo videoId="j1x-kW3mWXk" title={t.ytTitles.pairing} lang={lang} />
-      <YouTubeVideo videoId="vpKksQLxfaU" title={t.ytTitles.safety} lang={lang} />
     </div>
   )
 }
