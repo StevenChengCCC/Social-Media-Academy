@@ -1,4 +1,5 @@
 import React, { useMemo, useState } from 'react'
+import { YouTubeVideo } from '../App.jsx'
 
 /**
  * Slang Dictionary
@@ -6,6 +7,49 @@ import React, { useMemo, useState } from 'react'
  * - Sensitive terms are hidden by default with a strong warning; click to reveal
  * - Search (case-insensitive). If found, show meaning; otherwise say "Unknown term".
  */
+
+// --- START: Localization Data for Slang Page ---
+const locales = {
+  'en': {
+    title: 'Slang Dictionary',
+    lead1: 'Meanings online can shift by culture, age group, community, and even gendered contexts. A word that sounds playful to one group may feel rude or explicit to another, and some acronyms carry completely different meanings across platforms or countries.',
+    lead2: 'Use the search box below to look up unfamiliar slang quickly. Common terms are listed first (A–Z). Sensitive or mature terms are placed at the end and hidden by default—click to reveal only if you’re comfortable.',
+    searchPlaceholder: 'Search a term (e.g., GOAT, NSFW, 420, YYDS)…',
+    unknownTerm: 'Unknown term.',
+    typeToSearch: 'Type to search a specific term.',
+    commonH2: 'Common Slang (A–Z) & Chinese Slang',
+    sensitiveH2: 'Sensitive / Mature Slang (click to reveal)',
+    dangerNote: '⚠️ Contains sexual, abusive, drug-related, or self-harm references. Content may be disturbing.',
+    maskWarning: 'Hidden due to sensitive content.',
+    revealBtn: 'I understand — reveal',
+    cnSlangH2: 'Chinese Internet Slang (中文网络俚语)',
+    cnSlangLead: 'Chinese internet slang is often derived from Pinyin initials or specific cultural memes. We list some popular terms here for context.',
+    ytTitles: {
+      decoded: 'Teen Texting Codes Every Parent Should Know',
+      chinese: 'Chinese Internet Slang: YYDS, EMO Explained'
+    }
+  },
+  'zh-CN': {
+    title: '俚语词典',
+    lead1: '网络俚语的含义会随着文化、年龄段、社区甚至性别语境而变化。对一个群体来说听起来好玩的词，对另一个群体来说可能感觉粗鲁或露骨。有些缩写在不同平台或国家/地区也可能具有完全不同的含义。',
+    lead2: '使用下方的搜索框快速查找不熟悉的俚语。常见词汇按字母顺序排列在前（A–Z）。敏感或成人内容词汇放在末尾，默认隐藏——请在您感到舒适的情况下点击以显示。',
+    searchPlaceholder: '搜索词汇 (例如：GOAT, NSFW, 420, YYDS)…',
+    unknownTerm: '未知词汇。',
+    typeToSearch: '输入以搜索特定词汇。',
+    commonH2: '常见俚语 (A–Z) 与中文俚语',
+    sensitiveH2: '敏感 / 成人俚语 (点击显示)',
+    dangerNote: '⚠️ 包含性、辱骂、毒品或自残相关内容。内容可能令人不安。',
+    maskWarning: '因敏感内容被隐藏。',
+    revealBtn: '我理解 — 显示',
+    cnSlangH2: '中文网络俚语',
+    cnSlangLead: '中文网络俚语通常来源于拼音首字母或特定的文化梗。我们在此列出一些热门词汇以供参考。',
+    ytTitles: {
+      decoded: '青少年短信暗语解读',
+      chinese: '中文网络俚语：YYDS, EMO 解释'
+    }
+  }
+};
+// --- END: Localization Data for Slang Page ---
 
 const NORMAL_TERMS = [
   { term: 'AFK', meaning: 'Away from keyboard.' },
@@ -47,6 +91,15 @@ const NORMAL_TERMS = [
   { term: 'Woke', meaning: 'Socially aware (politics/race/gender contexts).' },
   { term: 'Yeet', meaning: 'Throw / exclaim with energy.' },
   { term: 'YOLO', meaning: 'You only live once (often ironically).' },
+];
+
+const CN_SLANG = [
+  // Chinese/Local Slang additions
+  { term: 'YYDS (永远的神)', meaning: 'An acronym meaning "Forever God." Used to express extreme admiration or praise for something or someone.' },
+  { term: '绝绝子 (Juejuezi)', meaning: 'Used to express something is "super awesome" or "absolutely amazing." A highly popular, often exaggerated, expression of praise.' },
+  { term: '破防 (Pofang)', meaning: 'Literally "break defense." Means to be emotionally overwhelmed or deeply touched, often unexpectedly, by something positive or negative.' },
+  { term: '打工人 (Dagongren)', meaning: 'Literally "worker." A self-deprecating term used by young white-collar workers to describe themselves as modern laborers, emphasizing the stress of work.' },
+  { term: 'emo', meaning: 'Borrowing from the English word "emo," but in Chinese slang, it means suddenly feeling deeply sad, depressed, or moody.' },
 ];
 
 const SENSITIVE_TERMS = [
@@ -105,14 +158,16 @@ const SENSITIVE_TERMS = [
 
 function normalize(s) { return s.toLowerCase().trim() }
 
-export default function Slang(){
+export default function Slang({ lang }){
+  const t = locales[lang];
   const [query, setQuery] = useState('')
   const [revealed, setRevealed] = useState(() => new Set()) // terms revealed by the user
 
   const sorted = useMemo(() => {
-    const norm = [...NORMAL_TERMS].sort((a,b)=>a.term.localeCompare(b.term))
+    // Merge existing normal terms and new Chinese slang
+    const combinedNormal = [...NORMAL_TERMS, ...CN_SLANG].sort((a,b)=>a.term.localeCompare(b.term))
     const sens = [...SENSITIVE_TERMS].sort((a,b)=>a.term.localeCompare(b.term))
-    return { norm, sens }
+    return { norm: combinedNormal, sens }
   }, [])
 
   const allTerms = useMemo(() => [...sorted.norm, ...sorted.sens], [sorted])
@@ -134,24 +189,17 @@ export default function Slang(){
   }
 
   return (
-    <div className="doc">
-      <h1>Slang Dictionary</h1>
-      <p className="lead">
-        Meanings online can shift by culture, age group, community, and even gendered contexts. A word that sounds
-        playful to one group may feel rude or explicit to another, and some acronyms carry completely different
-        meanings across platforms or countries.
-      </p>
-      <p className="lead">
-        Use the search box below to look up unfamiliar slang quickly. Common terms are listed first (A–Z).
-        Sensitive or mature terms are placed at the end and hidden by default—click to reveal only if you’re comfortable.
-      </p>
+    <div className="doc slang">
+      <h1>{t.title}</h1>
+      <p className="lead">{t.lead1}</p>
+      <p className="lead">{t.lead2}</p>
 
 
       {/* Search */}
       <div className="slang-search">
         <input
           className="slang-input"
-          placeholder="Search a term (e.g., GOAT, NSFW, 420)…"
+          placeholder={t.searchPlaceholder}
           value={query}
           onChange={(e)=>setQuery(e.target.value)}
         />
@@ -159,20 +207,20 @@ export default function Slang(){
           {query.trim() ? (
             hit ? (
               isSensitive(hit) ? (
-                <SensitiveRow item={hit} revealed={revealed.has(hit.term)} onReveal={()=>reveal(hit.term)} />
+                <SensitiveRow item={hit} revealed={revealed.has(hit.term)} onReveal={()=>reveal(hit.term)} lang={lang} />
               ) : (
                 <Row item={hit} />
               )
             ) : (
-              <i>Unknown term.</i>
+              <i>{t.unknownTerm}</i>
             )
-          ) : <i>Type to search a specific term.</i>}
+          ) : <i>{t.typeToSearch}</i>}
         </div>
       </div>
 
       {/* Normal list */}
       <div className="section">
-        <h2>Common Slang (A–Z)</h2>
+        <h2>{t.commonH2}</h2>
         <ul className="slang-list">
           {sorted.norm.map((item)=>(
             <li key={item.term}><Row item={item} /></li>
@@ -182,9 +230,9 @@ export default function Slang(){
 
       {/* Sensitive list */}
       <div className="section">
-        <h2 className="danger-title">Sensitive / Mature Slang (click to reveal)</h2>
+        <h2 className="danger-title">{t.sensitiveH2}</h2>
         <div className="danger-note">
-          ⚠️ Contains sexual, abusive, drug-related, or self-harm references. Content may be disturbing.
+          {t.dangerNote}
         </div>
         <ul className="slang-list">
           {sorted.sens.map((item)=>(
@@ -193,11 +241,20 @@ export default function Slang(){
                 item={item}
                 revealed={revealed.has(item.term)}
                 onReveal={()=>reveal(item.term)}
+                lang={lang}
               />
             </li>
           ))}
         </ul>
       </div>
+
+      <div className="section">
+        <h2>{t.cnSlangH2}</h2>
+        <p className="tip">{t.cnSlangLead}</p>
+      </div>
+
+      <YouTubeVideo videoId="parents-slang-1" title={t.ytTitles.decoded} lang={lang} />
+      <YouTubeVideo videoId="yyds-explained-2" title={t.ytTitles.chinese} lang={lang} />
     </div>
   )
 }
@@ -211,15 +268,16 @@ function Row({ item }) {
   )
 }
 
-function SensitiveRow({ item, revealed, onReveal }) {
+function SensitiveRow({ item, revealed, onReveal, lang }) {
+  const t = locales[lang];
   if (revealed) return <Row item={item} />
   return (
     <div className="slang-row">
       <b className="slang-term">{item.term}</b>
       <span className="slang-meaning masked">
         <span className="mask-warning">
-          Hidden due to sensitive content.
-          <button className="reveal-btn" onClick={onReveal}>I understand — reveal</button>
+          {t.maskWarning}
+          <button className="reveal-btn" onClick={onReveal}>{t.revealBtn}</button>
         </span>
       </span>
     </div>

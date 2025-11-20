@@ -1,5 +1,28 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react'
 
+// --- START: Localization Data for Play Page ---
+const locales = {
+  'en': {
+    title: 'Rock-Paper-Scissors · Particle Physics Simulation',
+    h2: 'Rock-Paper-Scissors · Physics Simulation',
+    back: '← Back to Home',
+    actions: { start: 'Start', pause: 'Pause', reset: 'Reset' },
+    labels: { density: 'Density', speed: 'Speed', size: 'Size' },
+    counts: { R: 'Rock', P: 'Paper', S: 'Scissors' },
+    note: 'Tip: Higher density and speed lead to faster faction conversion. All particles have equal mass and use approximate elastic collision.',
+  },
+  'zh-CN': {
+    title: '石头剪刀布 · 粒子物理模拟',
+    h2: '石头剪刀布 · 物理碰撞模拟',
+    back: '← 回到首页',
+    actions: { start: '开始', pause: '暂停', reset: '重置' },
+    labels: { density: '数量', speed: '速度', size: '大小' },
+    counts: { R: '石头', P: '布', S: '剪刀' },
+    note: '提示：数量越多、速度越快，阵营转化会更快发生；所有粒子等质量，使用近似弹性碰撞。',
+  }
+};
+// --- END: Localization Data for Play Page ---
+
 const EMOJI = { R: '🪨', P: '📄', S: '✂️' }
 const WINS_OVER = { R: 'S', S: 'P', P: 'R' }
 
@@ -35,7 +58,8 @@ class SpatialHash {
   }
 }
 
-export default function Play() {
+export default function Play({ lang }) {
+  const t = locales[lang];
   return (
     <div className="page">
       <header className="hero">
@@ -43,10 +67,10 @@ export default function Play() {
       </header>
 
       <div className="play-wrap">
-        <h2 className="play-title">🎮 石头剪刀布 · 粒子物理模拟</h2>
-        <RPSArena />
+        <h2 className="play-title">🎮 {t.title}</h2>
+        <RPSArena t={t} />
         <div className="play-back">
-          <a href="/" className="back">← 回到首页</a>
+          <a href="/" className="back">{t.back}</a>
         </div>
       </div>
 
@@ -57,7 +81,7 @@ export default function Play() {
   )
 }
 
-function RPSArena() {
+function RPSArena({ t }) {
   const canvasRef = useRef(null)
   const [running, setRunning] = useState(true)
   const [density, setDensity] = useState(60)
@@ -183,42 +207,42 @@ function RPSArena() {
   return (
     <div className="arena">
       <div className="arena-row">
-        <div className="arena-title">石头剪刀布 · 物理碰撞模拟</div>
+        <div className="arena-title">{t.h2}</div>
         <div className="arena-actions">
-          <button className="btn" onClick={() => setRunning(v => !v)}>{running ? '暂停' : '开始'}</button>
-          <button className="btn" onClick={reset}>重置</button>
+          <button className="btn" onClick={() => setRunning(v => !v)}>{running ? t.actions.pause : t.actions.start}</button>
+          <button className="btn" onClick={reset}>{t.actions.reset}</button>
         </div>
       </div>
 
       <div className="arena-grid">
         <label className="field">
-          <span>数量</span>
+          <span>{t.labels.density}</span>
           <input type="range" min="10" max="200" value={density} onChange={e=>setDensity(+e.target.value)} />
           <em>{density}</em>
         </label>
         <label className="field">
-          <span>速度</span>
+          <span>{t.labels.speed}</span>
           <input type="range" min="0.2" max="2.0" step="0.1" value={speed} onChange={e=>setSpeed(+e.target.value)} />
           <em>{speed.toFixed(1)}×</em>
         </label>
         <label className="field">
-          <span>大小</span>
+          <span>{t.labels.size}</span>
           <input type="range" min="8" max="24" value={radius} onChange={e=>setRadius(+e.target.value)} />
           <em>{radius}</em>
         </label>
       </div>
 
       <div className="arena-badges">
-        <span>🪨 石头：{counts.R}</span>
-        <span>📄 布：{counts.P}</span>
-        <span>✂️ 剪刀：{counts.S}</span>
+        <span>🪨 {t.counts.R}：{counts.R}</span>
+        <span>📄 {t.counts.P}：{counts.P}</span>
+        <span>✂️ {t.counts.S}：{counts.S}</span>
       </div>
 
       <div className="arena-canvas">
         <canvas ref={canvasRef} />
       </div>
 
-      <p className="arena-note">提示：数量越多、速度越快，阵营转化会更快发生；所有粒子等质量，使用近似弹性碰撞。</p>
+      <p className="arena-note">{t.note}</p>
     </div>
   )
 }

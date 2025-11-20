@@ -1,33 +1,134 @@
-/* ===== Theme variables (dark/light auto) ===== */
-:root{
-  --bg1:#0f172a; --bg2:#1e293b; --glass:rgba(255,255,255,.08);
-  --card:rgba(255,255,255,.12); --stroke:rgba(255,255,255,.2);
-  --text:#e5e7eb; --muted:#cbd5e1; --accent:#a78bfa; --accent2:#60a5fa;
-  --shadow:0 10px 30px rgba(0,0,0,.25);
-  --danger:#ef4444; --danger-ink:#7f1d1d; --danger-bg:rgba(239,68,68,.1);
-}
-@media (prefers-color-scheme: light){
-  :root{
-    --bg1:#eef2ff; --bg2:#e0e7ff; --glass:rgba(255,255,255,.6);
-    --card:#ffffffcc; --stroke:rgba(0,0,0,.08);
-    --text:#0f172a; --muted:#334155; --accent:#7c3aed; --accent2:#2563eb;
-    --shadow:0 10px 30px rgba(2,6,23,.12);
-    --danger:#dc2626; --danger-ink:#7f1d1d; --danger-bg:#fee2e2;
-  }
-}
-*{box-sizing:border-box} html,body,#root{height:100%} body{margin:0;font-family:ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial}
+/* ===== Theme variables (Restored Original Purple + Neon Accents) ===== */
+:root {
+  /* 1. RESTORED: Your Original Dark Theme Colors */
+  --bg1: #0f172a;
+  --bg2: #1e293b;
+  --glass: rgba(255, 255, 255, 0.08);
+  --card: rgba(255, 255, 255, 0.12);
+  --stroke: rgba(255, 255, 255, 0.2);
+  --text: #e5e7eb;
+  --muted: #cbd5e1;
 
-/* ===== Background & layout ===== */
-.page{
-  min-height:100%;
+  /* Your Original Purple & Blue */
+  --accent: #a78bfa;
+  --accent2: #60a5fa;
+
+  --shadow: 0 10px 30px rgba(0,0,0,0.25);
+  --danger: #ef4444;
+  --danger-ink: #7f1d1d;
+  --danger-bg: rgba(239, 68, 68, 0.1);
+
+  /* Platform Brand Colors (For Doc Background Glows) */
+  --insta-glow: radial-gradient(circle at top left, rgba(131,58,180,0.3), rgba(253,29,29,0.3), transparent 70%);
+  --tiktok-glow: linear-gradient(135deg, rgba(105,201,208,0.2), rgba(238,29,82,0.2));
+  --youtube-glow: radial-gradient(circle at top, rgba(255,0,0,0.25), transparent 70%);
+  --facebook-glow: radial-gradient(circle at top right, rgba(24,119,242,0.25), transparent 70%);
+  --discord-glow: linear-gradient(to bottom right, rgba(88,101,242,0.25), transparent);
+  --linkedin-glow: radial-gradient(circle at top left, rgba(10,102,194,0.25), transparent 70%);
+  --slang-glow: linear-gradient(to right, rgba(255,255,255,0.1), transparent);
+}
+
+/* Light Theme (Restored Original) */
+:root.light-theme {
+  --bg1: #eef2ff;
+  --bg2: #e0e7ff;
+  --glass: rgba(255, 255, 255, 0.6);
+  --card: rgba(255, 255, 255, 0.85);
+  --stroke: rgba(0, 0, 0, 0.08);
+  --text: #0f172a;
+  --muted: #334155;
+
+  --accent: #7c3aed; /* Original Darker Purple */
+  --accent2: #2563eb;
+
+  --shadow: 0 10px 30px rgba(2,6,23,.12);
+  --danger: #dc2626;
+  --danger-ink: #7f1d1d;
+  --danger-bg: #fee2e2;
+
+  /* Light Mode Glows (Softer) */
+  --insta-glow: radial-gradient(circle at top left, rgba(131,58,180,0.15), rgba(253,29,29,0.15), transparent 70%);
+  --tiktok-glow: linear-gradient(135deg, rgba(105,201,208,0.15), rgba(238,29,82,0.15));
+  --youtube-glow: radial-gradient(circle at top, rgba(255,0,0,0.1), transparent 70%);
+  --facebook-glow: radial-gradient(circle at top right, rgba(24,119,242,0.1), transparent 70%);
+  --discord-glow: linear-gradient(to bottom right, rgba(88,101,242,0.1), transparent);
+  --linkedin-glow: radial-gradient(circle at top left, rgba(10,102,194,0.1), transparent 70%);
+  --slang-glow: linear-gradient(to right, rgba(0,0,0,0.05), transparent);
+}
+
+*{box-sizing:border-box}
+html,body,#root{height:100%}
+
+/* KEEP FIX: Body background to prevent white flash */
+body {
+  margin: 0;
+  font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial;
+  background-color: var(--bg1); /* Critical for dark mode */
+  color: var(--text);
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* ===== Layout ===== */
+.page {
+  min-height: 100%;
+  /* Original Background Gradient */
   background:
     radial-gradient(1200px 500px at 10% -10%, color-mix(in oklab,var(--accent) 72%, transparent) , transparent 55%),
     radial-gradient(900px 480px at 100% 0%, color-mix(in oklab,var(--accent2) 70%, transparent), transparent 60%),
     linear-gradient(180deg,var(--bg1),var(--bg2));
-  display:grid; grid-template-rows:auto 1fr auto;
+  display: grid; grid-template-rows: auto 1fr auto;
 }
 
-/* ===== Fancy hero ===== */
+/* =========================================
+   BUTTONS (NEON & GLASS STYLE) - MODIFIED
+   ========================================= */
+
+/* Applied to Top Right Toggles & Back Button */
+.theme-toggle, .lang-toggle, .back-cta {
+  position: fixed; top: 20px; z-index: 1000;
+  padding: 10px 16px;
+  border-radius: 12px;
+
+  /* Glass Effect */
+  background: var(--glass);
+  border: 1px solid var(--stroke);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+
+  color: var(--text);
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  text-decoration: none;
+
+  /* Smooth Transition */
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+
+.theme-toggle { right: 20px; }
+.lang-toggle { right: 80px; } /* Spacing */
+.back-cta { position: static; display: inline-block; margin-bottom: 20px; } /* Reset fixed for back button in doc */
+
+/* NEON HOVER EFFECT */
+.theme-toggle:hover, .lang-toggle:hover, .back-cta:hover {
+  transform: translateY(-2px);
+  border-color: var(--accent);
+  background: color-mix(in srgb, var(--accent) 15%, var(--glass));
+  /* The Neon Glow */
+  box-shadow:
+    0 0 15px color-mix(in srgb, var(--accent) 40%, transparent),
+    inset 0 0 10px rgba(255,255,255,0.1);
+  text-shadow: 0 0 8px var(--accent);
+}
+
+.back-link { width:min(1000px,94%); margin:20px auto 0; }
+
+
+/* =========================================
+   HOME PAGE (RESTORED ORIGINAL)
+   ========================================= */
+
 .hero{width:100%; padding:clamp(36px,7vw,96px) 24px 18px; display:grid; place-items:center; text-align:center; position:relative; overflow:hidden}
 .hero.fancy::before{
   content:""; position:absolute; inset:-40% -10% auto -10%; height:260px;
@@ -36,20 +137,18 @@
 }
 @keyframes spin{to{transform:rotate(360deg)}}
 
-.title{margin:0; line-height:1; letter-spacing:.02em; font-size:clamp(28px,6.2vw,72px); font-weight:600; color:var(--text)}
+.title{margin:0; line-height:1; letter-spacing:.02em; font-size:clamp(28px,6.2vw,72px); font-weight:600; color:var(--text); position: relative; z-index: 1;}
 .title span{
   background:linear-gradient(90deg, var(--text), var(--muted));
   -webkit-background-clip:text; background-clip:text; color:transparent;
 }
 
-/* Subtitle in English */
 .subhero{
   max-width:min(860px,92%); margin:14px auto 12px; color:var(--muted);
-  font-size:clamp(14px,1.7vw,17px); line-height:1.55;
+  font-size:clamp(14px,1.7vw,17px); line-height:1.55; position: relative; z-index: 1;
 }
 
-/* chips quick nav */
-.chips{display:flex; flex-wrap:wrap; gap:8px; justify-content:center; margin:8px 0 2px}
+.chips{display:flex; flex-wrap:wrap; gap:8px; justify-content:center; margin:8px 0 2px; position: relative; z-index: 1;}
 .chip{
   text-decoration:none; color:var(--text); font-size:13px;
   padding:6px 10px; border:1px solid var(--stroke); border-radius:999px;
@@ -57,8 +156,9 @@
 }
 .chip:hover{transform:translateY(-1px); border-color:rgba(255,255,255,.35); background:var(--card)}
 
-/* ===== Wide cards (list) ===== */
+/* RESTORED LIST & TILES */
 .list{width:min(1000px,92%); margin:8px auto 24px; display:grid; gap:14px}
+
 .tile-wide{
   position:relative; display:grid; grid-template-columns:220px 1fr auto; gap:14px; align-items:center;
   text-decoration:none; color:var(--text);
@@ -66,125 +166,121 @@
   box-shadow:var(--shadow); transition:transform .2s ease, border-color .2s ease, background .2s ease;
 }
 .tile-wide:hover{transform:translateY(-1px); border-color:rgba(255,255,255,.35)}
-.tile-media{width:220px; aspect-ratio:16/9; border-radius:12px; background:var(--glass); border:1px solid var(--stroke); overflow:hidden; display:grid; place-items:center}
+
+.tile-media{
+  width:220px; aspect-ratio:16/9; border-radius:12px;
+  background:var(--glass); /* Original glass bg */
+  border:1px solid var(--stroke);
+  overflow:hidden; display:grid; place-items:center;
+}
 .tile-media img{width:100%; height:100%; object-fit:contain; display:block}
+
 .tile-body{min-width:0}
 .tile-title{font-weight:800; font-size:18px; letter-spacing:.01em; margin-bottom:2px}
 .tile-desc{color:var(--muted); font-size:14px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis}
 .tile-wide .tile-arrow{align-self:stretch; display:grid; place-items:center; padding:0 8px; opacity:.6; transition:transform .2s ease, opacity .2s ease}
 .tile-wide:hover .tile-arrow{transform:translateX(3px); opacity:.9}
 
-/* highlight banner (LinkedIn entry) */
-.highlight{
-  width:min(1000px,92%); margin:6px auto 18px; padding:10px 12px;
-  border:1px solid color-mix(in oklab,var(--accent) 35%, var(--stroke));
-  border-radius:14px; background:linear-gradient(90deg, color-mix(in oklab,var(--accent) 18%, transparent), transparent);
-  display:flex; align-items:center; justify-content:space-between; gap:10px;
-}
-.hl-left{display:flex; align-items:center; gap:10px}
-.hl-dot{width:10px; height:10px; border-radius:50%; background:radial-gradient(circle at 30% 30%, #fff, var(--accent))}
-.hl-text{color:var(--text); display:flex; gap:8px; flex-wrap:wrap}
-.hl-link{text-decoration:none; color:var(--text); border-bottom:1px dashed var(--stroke)}
-.hl-link:hover{border-color:rgba(255,255,255,.35)}
-
-/* play link (bottom) */
-.play-link{width:min(1000px,92%); margin:6px auto 14px; display:flex; justify-content:center}
-.play-cta{font-size:14px; color:var(--text); opacity:.9; text-decoration:none; border:1px dashed var(--stroke); padding:8px 12px; border-radius:999px; background:var(--glass); transition:transform .16s ease,opacity .16s ease,border-color .16s ease}
-.play-cta:hover{transform:translateY(-1px); opacity:1; border-color:rgba(255,255,255,.35)}
-
-/* responsive */
 @media (max-width:720px){
   .tile-wide{grid-template-columns:1fr auto; grid-template-rows:auto auto; gap:10px}
   .tile-media{width:100%; grid-column:1/-1}
 }
 
-/* footer & not-found */
-.nf{min-height:60vh; display:grid; place-items:center; color:var(--text); text-align:center; padding:24px}
-.back{color:var(--text); border:1px solid var(--stroke); padding:8px 12px; border-radius:12px; text-decoration:none; background:var(--glass)}
+.play-link{width:min(1000px,92%); margin:6px auto 14px; display:flex; justify-content:center}
+.play-cta{font-size:14px; color:var(--text); opacity:.9; text-decoration:none; border:1px dashed var(--stroke); padding:8px 12px; border-radius:999px; background:var(--glass); transition:transform .16s ease,opacity .16s ease,border-color .16s ease}
+.play-cta:hover{transform:translateY(-1px); opacity:1; border-color:rgba(255,255,255,.35)}
+
 .footer{width:min(1000px,92%); margin:0 auto 32px; color:var(--muted); font-size:13px; display:flex; justify-content:center; gap:10px; padding:8px 0; border-top:1px solid color-mix(in oklab,var(--stroke) 60%, transparent)}
 
-/* ===== Shared guide doc ===== */
-.doc{width:min(1100px,94%); margin:10px auto 28px; color:var(--text); background:color-mix(in oklab,var(--card) 75%, transparent); border:1px solid var(--stroke); border-radius:16px; padding:16px; box-shadow:var(--shadow)}
-.doc h1{margin:0 0 6px; font-size:28px}
-.doc p.lead{color:var(--muted); margin:0 0 14px}
-.pill{display:inline-block; padding:3px 8px; border-radius:999px; border:1px solid var(--stroke); background:var(--glass); font-size:12px; margin:0 6px 6px 0}
-.section{border-top:1px solid var(--stroke); padding-top:12px; margin-top:12px}
-.section h2{margin:0 0 6px; font-size:18px}
-.steps{margin:6px 0 2px; padding-left:18px}
-.steps li{margin:4px 0; line-height:1.45}
-.tip{font-size:13px; color:var(--muted)}
+/* =========================================
+   INTERNAL PAGES (NEON GLOW BACKGROUNDS)
+   ========================================= */
 
-/* ===== Slang dictionary ===== */
-.slang-search{display:grid; gap:8px; margin:8px 0 10px}
-.slang-input{
-  width:100%; padding:10px 12px; border-radius:12px; border:1px solid var(--stroke);
-  background:var(--glass); color:var(--text);
+.doc{
+  width:min(1100px,94%); margin:10px auto 28px; color:var(--text);
+  background: var(--card); /* Use card background */
+  border:1px solid var(--stroke);
+  border-radius:16px; padding:32px;
+  box-shadow:var(--shadow);
+  position: relative; overflow: hidden;
+  backdrop-filter: blur(12px);
 }
+
+/* Neon Background Glow Logic */
+.doc::before {
+  content: ""; position: absolute; inset: 0; pointer-events: none; z-index: 0;
+  background: transparent;
+  transition: background 0.5s ease;
+}
+.doc.instagram::before { background: var(--insta-glow); }
+.doc.tiktok::before { background: var(--tiktok-glow); }
+.doc.youtube::before { background: var(--youtube-glow); }
+.doc.facebook::before { background: var(--facebook-glow); }
+.doc.discord::before { background: var(--discord-glow); }
+.doc.linkedin::before { background: var(--linkedin-glow); }
+.doc.slang::before { background: var(--slang-glow); }
+
+.doc > * { position: relative; z-index: 1; }
+
+.doc h1{margin:0 0 12px; font-size:28px;}
+.doc p.lead{color:var(--muted); margin:0 0 24px;}
+
+/* Beautiful Sections */
+.section{
+  border-top:1px solid var(--stroke);
+  padding-top:16px; margin-top:16px;
+  background: rgba(0,0,0,0.1); /* Slight dim for contrast */
+  border-radius: 12px;
+  padding: 20px;
+}
+:root.light-theme .section { background: rgba(255,255,255,0.4); }
+
+.section h2{margin:0 0 12px; font-size:1.4em; color: var(--text);}
+
+.pill{
+  display:inline-block; padding:4px 10px; border-radius:999px;
+  border:1px solid var(--stroke); background:var(--glass);
+  font-size:12px; margin:0 6px 6px 0;
+}
+
+.steps{margin:10px 0 2px; padding-left:18px;}
+.steps li{margin:8px 0; line-height:1.5;}
+
+.tip{
+  font-size:13px; color:var(--muted);
+  background: rgba(16, 185, 129, 0.1);
+  border-left: 3px solid #10b981;
+  padding: 12px; border-radius: 6px; margin-top: 15px;
+}
+
+/* YouTube */
+.yt{margin:20px 0 16px}
+.yt-frame{position:relative;width:100%;aspect-ratio:16/9;border:1px solid var(--stroke);border-radius:12px;overflow:hidden;background:#000}
+.yt-frame iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
+.yt-caption{font-size:13px;color:var(--muted);margin-top:6px; text-align: center;}
+
+/* Slang & Play */
+.slang-search{display:grid; gap:8px; margin:8px 0 10px}
+.slang-input{width:100%; padding:10px 12px; border-radius:12px; border:1px solid var(--stroke); background:var(--glass); color:var(--text);}
 .slang-result{font-size:14px; color:var(--text)}
 .slang-list{list-style:none; padding-left:0; margin:8px 0}
-.slang-row{
-  display:flex; gap:10px; align-items:flex-start; padding:8px 12px; border:1px solid var(--stroke);
-  border-radius:12px; background:var(--glass); margin-bottom:8px;
-}
-.slang-term{min-width:140px; display:inline-block}
+.slang-row{display:flex; gap:10px; align-items:flex-start; padding:8px 12px; border:1px solid var(--stroke); border-radius:12px; background:var(--glass); margin-bottom:8px;}
+.slang-term{min-width:140px; display:inline-block; color: var(--accent); font-weight: bold;}
 .slang-meaning{color:var(--muted)}
-.slang-meaning.masked .mask-warning{
-  display:inline-flex; align-items:center; gap:10px; flex-wrap:wrap;
-  background:var(--danger-bg); color:var(--danger-ink);
-  border:1px dashed var(--danger); border-radius:10px; padding:6px 8px;
-}
-.reveal-btn{
-  border:1px solid var(--danger); background:color-mix(in oklab,var(--danger) 12%, transparent);
-  color:var(--danger-ink); border-radius:10px; padding:4px 8px; cursor:pointer;
-}
-.reveal-btn:hover{filter:brightness(1.05)}
-.danger-title{color:var(--danger)}
-.danger-note{
-  background:var(--danger-bg); border:1px solid var(--danger);
-  color:var(--danger-ink); padding:8px 10px; border-radius:10px; margin:6px 0 10px;
-}
-
-/* ===== Play (RPS Arena) ===== */
-.play-wrap{width:min(1100px,94%); margin:8px auto 28px}
-.play-title{color:var(--text); font-size:clamp(18px,2.6vw,24px); margin:6px 0 12px}
-.play-back{margin-top:14px; text-align:center}
-
-.arena{
-  background: color-mix(in oklab, var(--card) 70%, transparent);
-  border: 1px solid var(--stroke);
-  border-radius: 16px;
-  padding: 14px;
-  box-shadow: var(--shadow);
-}
+.reveal-btn{border:1px solid var(--danger); background:color-mix(in oklab,var(--danger) 12%, transparent); color:var(--danger-ink); border-radius:10px; padding:4px 8px; cursor:pointer;}
+.arena{background: color-mix(in oklab, var(--card) 70%, transparent); border: 1px solid var(--stroke); border-radius: 16px; padding: 14px; box-shadow: var(--shadow);}
 .arena-row{display:flex; gap:10px; align-items:center; margin-bottom:8px}
 .arena-title{font-weight:700; color:var(--text)}
 .arena-actions{margin-left:auto; display:flex; gap:8px}
-.btn{
-  padding:8px 12px; border-radius:12px; border:1px solid var(--stroke); background:var(--glass);
-  color:var(--text); cursor:pointer; transition:transform .15s ease, border-color .15s ease;
-}
+.btn{padding:8px 12px; border-radius:12px; border:1px solid var(--stroke); background:var(--glass); color:var(--text); cursor:pointer; transition:transform .15s ease, border-color .15s ease;}
 .btn:hover{transform:translateY(-1px); border-color:rgba(255,255,255,.35)}
-
 .arena-grid{display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:10px; margin:10px 0 8px}
-@media (max-width:720px){ .arena-grid{grid-template-columns:1fr} }
-.field{
-  display:grid; grid-template-columns:70px 1fr 60px; align-items:center; gap:8px; padding:8px;
-  border:1px solid var(--stroke); border-radius:12px; background:var(--glass);
-}
+.field{display:grid; grid-template-columns:70px 1fr 60px; align-items:center; gap:8px; padding:8px; border:1px solid var(--stroke); border-radius:12px; background:var(--glass);}
 .field>span{color:var(--muted); font-size:13px}
 .field>em{color:var(--muted); font-style:normal; text-align:right; font-variant-numeric:tabular-nums}
 .field input[type="range"]{width:100%}
-
 .arena-badges{display:flex; gap:8px; flex-wrap:wrap; margin-bottom:8px; color:#0f172a}
-.arena-badges span{
-  background:#ffffffb3; border:1px solid var(--stroke); border-radius:999px; padding:4px 8px;
-}
+.arena-badges span{background:#ffffffb3; border:1px solid var(--stroke); border-radius:999px; padding:4px 8px;}
 .arena-canvas{border:1px solid var(--stroke); border-radius:16px; overflow:hidden; background:linear-gradient(135deg,#f0f9ff,#eef2ff)}
 .arena-canvas canvas{display:block; width:100%; height:560px}
 .arena-note{margin-top:8px; color:var(--muted); font-size:12px}
-.subhero { font-size: clamp(15px, 1.9vw, 18px); }
-
-.yt{margin:10px 0 16px}
-.yt-frame{position:relative;width:100%;aspect-ratio:16/9;border:1px solid var(--stroke);border-radius:12px;overflow:hidden;background:#000}
-.yt-frame iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
-.yt-caption{font-size:13px;color:var(--muted);margin-top:6px}
