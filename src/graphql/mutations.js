@@ -1,6 +1,44 @@
 /* eslint-disable */
 // this is an auto generated file. This will be overwritten
 
+export const createUserAnalytics = /* GraphQL */ `
+  mutation CreateUserAnalytics(
+    $input: CreateUserAnalyticsInput!
+    $condition: ModelUserAnalyticsConditionInput
+  ) {
+    createUserAnalytics(input: $input, condition: $condition) {
+      id
+      userId
+      isAnonymous
+      page
+      durationSeconds
+      clickCount
+      timestamp
+      createdAt
+      updatedAt
+      __typename
+    }
+  }
+`;
+export const updateUserAnalytics = /* GraphQL */ `
+  mutation UpdateUserAnalytics(
+    $input: UpdateUserAnalyticsInput!
+    $condition: ModelUserAnalyticsConditionInput
+  ) {
+    updateUserAnalytics(input: $input, condition: $condition) {
+      id
+      userId
+      isAnonymous
+      page
+      durationSeconds
+      clickCount
+      timestamp
+      createdAt
+      updatedAt
+      __typename
+    }
+  }
+`;
 export const createSlangTerm = /* GraphQL */ `
   mutation CreateSlangTerm(
     $input: CreateSlangTermInput!
@@ -65,9 +103,9 @@ export const createContribution = /* GraphQL */ `
       note
       status
       adminResponse
+      owner
       createdAt
       updatedAt
-      owner
       __typename
     }
   }
@@ -85,9 +123,9 @@ export const updateContribution = /* GraphQL */ `
       note
       status
       adminResponse
+      owner
       createdAt
       updatedAt
-      owner
       __typename
     }
   }
@@ -105,9 +143,28 @@ export const deleteContribution = /* GraphQL */ `
       note
       status
       adminResponse
+      owner
       createdAt
       updatedAt
-      owner
+      __typename
+    }
+  }
+`;
+export const deleteUserAnalytics = /* GraphQL */ `
+  mutation DeleteUserAnalytics(
+    $input: DeleteUserAnalyticsInput!
+    $condition: ModelUserAnalyticsConditionInput
+  ) {
+    deleteUserAnalytics(input: $input, condition: $condition) {
+      id
+      userId
+      isAnonymous
+      page
+      durationSeconds
+      clickCount
+      timestamp
+      createdAt
+      updatedAt
       __typename
     }
   }

@@ -62,9 +62,9 @@ export const onCreateContribution = /* GraphQL */ `
       note
       status
       adminResponse
+      owner
       createdAt
       updatedAt
-      owner
       __typename
     }
   }
@@ -82,9 +82,9 @@ export const onUpdateContribution = /* GraphQL */ `
       note
       status
       adminResponse
+      owner
       createdAt
       updatedAt
-      owner
       __typename
     }
   }
@@ -102,9 +102,63 @@ export const onDeleteContribution = /* GraphQL */ `
       note
       status
       adminResponse
+      owner
       createdAt
       updatedAt
-      owner
+      __typename
+    }
+  }
+`;
+export const onCreateUserAnalytics = /* GraphQL */ `
+  subscription OnCreateUserAnalytics(
+    $filter: ModelSubscriptionUserAnalyticsFilterInput
+  ) {
+    onCreateUserAnalytics(filter: $filter) {
+      id
+      userId
+      isAnonymous
+      page
+      durationSeconds
+      clickCount
+      timestamp
+      createdAt
+      updatedAt
+      __typename
+    }
+  }
+`;
+export const onUpdateUserAnalytics = /* GraphQL */ `
+  subscription OnUpdateUserAnalytics(
+    $filter: ModelSubscriptionUserAnalyticsFilterInput
+  ) {
+    onUpdateUserAnalytics(filter: $filter) {
+      id
+      userId
+      isAnonymous
+      page
+      durationSeconds
+      clickCount
+      timestamp
+      createdAt
+      updatedAt
+      __typename
+    }
+  }
+`;
+export const onDeleteUserAnalytics = /* GraphQL */ `
+  subscription OnDeleteUserAnalytics(
+    $filter: ModelSubscriptionUserAnalyticsFilterInput
+  ) {
+    onDeleteUserAnalytics(filter: $filter) {
+      id
+      userId
+      isAnonymous
+      page
+      durationSeconds
+      clickCount
+      timestamp
+      createdAt
+      updatedAt
       __typename
     }
   }

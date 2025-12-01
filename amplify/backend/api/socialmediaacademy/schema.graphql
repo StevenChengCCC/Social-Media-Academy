@@ -31,18 +31,34 @@ type SlangTerm @model @auth(rules: [
   example: String
 }
 
-# 3. 用户的贡献/请求
+# 3. 用户的贡献 (用于排行榜)
 type Contribution @model @auth(rules: [
-  # 用户可以创建，且只能看到自己的
   { allow: owner, operations: [create, read] },
-  # 管理员可以管理所有
+  { allow: public, operations: [read] }, # 允许公开读取以便生成排行榜
   { allow: groups, groups: ["Admins"], operations: [create, read, update, delete] }
 ]) {
   id: ID!
   type: RequestType!
-  term: String!           # 涉及的单词
-  proposedMeaning: String # 建议的意思 (如果是提问，这里可能为空)
-  note: String            # 用户的备注/理由
+  term: String!
+  proposedMeaning: String
+  note: String
   status: RequestStatus!
-  adminResponse: String   # 管理员的回复
+  adminResponse: String
+  owner: String # Amplify 会自动填充，但在查询时我们需要聚合它
+}
+
+# 4. 新增：用户行为分析 (Analytics)
+type UserAnalytics @model @auth(rules: [
+  # 允许任何人（包括未登录用户）创建记录
+  { allow: public, operations: [create] },
+  # 只有管理员可以读取数据
+  { allow: groups, groups: ["Admins"], operations: [read, delete] }
+]) {
+  id: ID!
+  userId: String!       # 存储 Cognito User ID 或 匿名 UUID
+  isAnonymous: Boolean! # 标记是否为匿名用户
+  page: String!         # 页面路径或名称 (e.g., "/tiktok")
+  durationSeconds: Int! # 停留时长 (秒)
+  clickCount: Int!      # 点击次数
+  timestamp: AWSDateTime
 }

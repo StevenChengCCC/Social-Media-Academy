@@ -88,6 +88,7 @@ const locales = {
 // --- END: Localization Data for LinkedIn Page ---
 
 export default function LinkedIn({ lang }){
+    usePageTracking('LinkedIn');
   const t = locales[lang];
   const s = t.sections;
   return (

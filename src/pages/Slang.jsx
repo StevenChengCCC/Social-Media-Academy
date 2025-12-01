@@ -1,191 +1,115 @@
-import React, { useMemo, useState } from 'react'
+import React, { useMemo, useState, useEffect } from 'react'
 import { YouTubeVideo, BackToHomeLink } from '../App.jsx'
+import { generateClient } from 'aws-amplify/api'
+import { createContribution } from '../graphql/mutations'
+import { listContributions, listSlangTerms } from '../graphql/queries'
+import { usePageTracking } from '../hooks/usePageTracking' // 导入 Hook
 
-/**
- * Slang Dictionary
- */
+const client = generateClient();
 
-// --- START: Localization Data for Slang Page ---
-const locales = {
-  'en': {
-    title: 'Slang Dictionary',
-    lead1: 'Meanings online can shift by culture, age group, community, and even gendered contexts. A word that sounds playful to one group may feel rude or explicit to another, and some acronyms carry completely different meanings across platforms or countries.',
-    lead2: 'Use the search box below to look up unfamiliar slang quickly. Common terms are listed first (A–Z). Sensitive or mature terms are placed at the end and hidden by default—click to reveal only if you’re comfortable.',
-    searchPlaceholder: 'Search a term (e.g., GOAT, NSFW, 420, YYDS)…',
-    unknownTerm: 'Unknown term.',
-    typeToSearch: 'Type to search a specific term.',
-    commonH2: 'Common Slang (A–Z) & Chinese Slang',
-    sensitiveH2: 'Sensitive / Mature Slang (click to reveal)',
-    dangerNote: '⚠️ Contains sexual, abusive, drug-related, or self-harm references. Content may be disturbing.',
-    maskWarning: 'Hidden due to sensitive content.',
-    revealBtn: 'I understand — reveal',
-    cnSlangH2: 'Chinese Internet Slang (中文网络俚语)',
-    cnSlangLead: 'Chinese internet slang is often derived from Pinyin initials or specific cultural memes. We list some popular terms here for context.',
-    ytTitles: {
-      decoded: 'Teen Slang Guide for Parents',
-    },
-    // --- New Form Locales ---
-    submitH2: 'Contribute to the Dictionary',
-    submitLead: 'Know a slang term we missed? Submit it below for review. Once approved by an admin, it will appear in the list.',
-    inputTerm: 'Slang Term (e.g., Riz)',
-    inputMeaning: 'Meaning / Context',
-    submitBtn: 'Submit for Review',
-    submitSuccess: 'Thanks! Your term has been submitted for moderation.',
-    fillError: 'Please fill in both fields.'
-  },
-  'zh-CN': {
-    title: '俚语词典',
-    lead1: '网络俚语的含义会随着文化、年龄段、社区甚至性别语境而变化。对一个群体来说听起来好玩的词，对另一个群体来说可能感觉粗鲁或露骨。有些缩写在不同平台或国家/地区也可能具有完全不同的含义。',
-    lead2: '使用下方的搜索框快速查找不熟悉的俚语。常见词汇按字母顺序排列在前（A–Z）。敏感或成人内容词汇放在末尾，默认隐藏——请在您感到舒适的情况下点击以显示。',
-    searchPlaceholder: '搜索词汇 (例如：GOAT, NSFW, 420, YYDS)…',
-    unknownTerm: '未知词汇。',
-    typeToSearch: '输入以搜索特定词汇。',
-    commonH2: '常见俚语 (A–Z) 与中文俚语',
-    sensitiveH2: '敏感 / 成人俚语 (点击显示)',
-    dangerNote: '⚠️ 包含性、辱骂、毒品或自残相关内容。内容可能令人不安。',
-    maskWarning: '因敏感内容被隐藏。',
-    revealBtn: '我理解 — 显示',
-    cnSlangH2: '中文网络俚语',
-    cnSlangLead: '中文网络俚语通常来源于拼音首字母或特定的文化梗。我们在此列出一些热门词汇以供参考。',
-    ytTitles: {
-      decoded: '青少年短信暗语解读',
-    },
-    // --- New Form Locales ---
-    submitH2: '贡献词条',
-    submitLead: '知道我们遗漏的俚语吗？在下方提交以供审核。管理员批准后，它将出现在列表中。',
-    inputTerm: '俚语词汇 (例如：Rizz)',
-    inputMeaning: '含义 / 语境',
-    submitBtn: '提交审核',
-    submitSuccess: '谢谢！您的词条已提交，等待审核。',
-    fillError: '请填写两个字段。'
+// ... Locales 数据保持不变 (为了节省篇幅，此处省略 Locales 变量，请保留您原文件中的定义) ...
+// 请务必保留原文件中的 const locales = { ... } 和 const NORMAL_TERMS = [...], const SENSITIVE_TERMS = [...] 等定义
+
+// 排行榜组件
+function Leaderboard({ lang }) {
+  const [leaders, setLeaders] = useState([]);
+
+  useEffect(() => {
+    fetchLeaderboard();
+  }, []);
+
+  async function fetchLeaderboard() {
+    try {
+      const result = await client.graphql({
+        query: listContributions,
+        variables: { filter: { status: { eq: "APPROVED" } }, limit: 1000 },
+        authMode: 'API_KEY'
+      });
+      const items = result.data.listContributions.items;
+      const counts = {};
+      items.forEach(item => {
+        const user = item.owner || 'Anonymous';
+        counts[user] = (counts[user] || 0) + 1;
+      });
+      const sorted = Object.entries(counts)
+        .map(([user, count]) => ({ user, count }))
+        .sort((a, b) => b.count - a.count)
+        .slice(0, 5);
+      setLeaders(sorted);
+    } catch (e) {
+      console.error("Leaderboard error", e);
+    }
   }
-};
-// --- END: Localization Data for Slang Page ---
 
-const NORMAL_TERMS = [
-  { term: 'AFK', meaning: 'Away from keyboard.' },
-  { term: 'BFF', meaning: 'Best friends forever.' },
-  { term: 'Boujee', meaning: 'Acting rich or high-class; fancy.' },
-  { term: 'BRB', meaning: 'Be right back.' },
-  { term: 'Bruh', meaning: "Casual 'bro'; an expression of disbelief." },
-  { term: 'BTW', meaning: 'By the way.' },
-  { term: 'Dead', meaning: 'Hilarious; “I’m dead” from laughing.' },
-  { term: 'Deets', meaning: 'Details; more information.' },
-  { term: 'Dope', meaning: 'Awesome; high quality.' },
-  { term: 'DWBH', meaning: 'Don’t worry, be happy.' },
-  { term: 'Extra', meaning: 'Overly dramatic or doing too much.' },
-  { term: 'Fam', meaning: 'Close friends or family.' },
-  { term: 'Fire', meaning: 'Cool; amazing.' },
-  { term: 'FOMO', meaning: 'Fear of missing out.' },
-  { term: 'GOAT', meaning: 'Greatest of all time.' },
-  { term: 'Gucci', meaning: 'Good; going well; cool.' },
-  { term: 'Hundo', meaning: 'One hundred percent; absolutely.' },
-  { term: 'IRL', meaning: 'In real life.' },
-  { term: 'LMAO', meaning: 'Laughing my ass off.' },
-  { term: 'Lit', meaning: 'Exciting or excellent.' },
-  { term: 'Mood', meaning: 'Relatable feeling or vibe.' },
-  { term: 'MYOB', meaning: 'Mind your own business.' },
-  { term: 'NGL', meaning: 'Not gonna lie.' },
-  { term: 'Noob', meaning: 'Novice; new or bad at something.' },
-  { term: 'OG', meaning: 'Original; classic; the first.' },
-  { term: 'OMG', meaning: 'Oh my god / gosh.' },
-  { term: 'Salty', meaning: 'Annoyed or bitter.' },
-  { term: 'Shook', meaning: 'Shocked or strongly affected.' },
-  { term: 'Skurt', meaning: 'Leave quickly; bounce.' },
-  { term: 'SKSKSKSK', meaning: 'Excitement; often playful spam.' },
-  { term: 'Slay', meaning: 'Do something exceptionally well.' },
-  { term: 'Snatched', meaning: 'Looking great; on point.' },
-  { term: 'Sus', meaning: 'Suspicious; sketchy.' },
-  { term: 'Tea', meaning: 'Gossip; news. “Spill the tea.”' },
-  { term: 'TBH', meaning: 'To be honest.' },
-  { term: 'WDYM', meaning: 'What do you mean?' },
-  { term: 'Woke', meaning: 'Socially aware (politics/race/gender contexts).' },
-  { term: 'Yeet', meaning: 'Throw / exclaim with energy.' },
-  { term: 'YOLO', meaning: 'You only live once (often ironically).' },
-];
+  const title = lang === 'en' ? '🏆 Top Contributors' : '🏆 贡献排行榜';
+  const userLabel = lang === 'en' ? 'User' : '用户';
+  const countLabel = lang === 'en' ? 'Terms Approved' : '通过词条数';
 
-const CN_SLANG = [
-  { term: 'YYDS (永远的神)', meaning: 'An acronym meaning "Forever God." Used to express extreme admiration or praise for something or someone.' },
-  { term: '绝绝子 (Juejuezi)', meaning: 'Used to express something is "super awesome" or "absolutely amazing." A highly popular, often exaggerated, expression of praise.' },
-  { term: '破防 (Pofang)', meaning: 'Literally "break defense." Means to be emotionally overwhelmed or deeply touched, often unexpectedly, by something positive or negative.' },
-  { term: '打工人 (Dagongren)', meaning: 'Literally "worker." A self-deprecating term used by young white-collar workers to describe themselves as modern laborers, emphasizing the stress of work.' },
-  { term: 'emo', meaning: 'Borrowing from the English word "emo," but in Chinese slang, it means suddenly feeling deeply sad, depressed, or moody.' },
-];
+  if (leaders.length === 0) return null;
 
-const SENSITIVE_TERMS = [
-  { term: 'AF', meaning: 'As f*ck; strong emphasis.', sensitive: true },
-  { term: 'Addy', meaning: "Adderall; ADHD medication sometimes misused.", sensitive: true },
-  { term: 'ASL', meaning: 'Age / sex / location (often used by strangers).', sensitive: true },
-  { term: 'Bae', meaning: 'Significant other (slang).', sensitive: true },
-  { term: 'Basic', meaning: 'Unoriginal; conformist (can be insulting).', sensitive: true },
-  { term: 'BF/GF', meaning: 'Boyfriend / Girlfriend.', sensitive: true },
-  { term: 'Cap / No cap', meaning: 'Lie / Not a lie.', sensitive: true },
-  { term: 'Catfishing', meaning: 'Pretending to be someone else online.', sensitive: true },
-  { term: 'CD9', meaning: '“Code 9”: parents nearby.', sensitive: true },
-  { term: 'CU46', meaning: '“See you for sex.”', sensitive: true },
-  { term: 'D', meaning: 'Dick (vulgar).', sensitive: true },
-  { term: 'Down in the DMs', meaning: 'Private messages, often flirting/hookups.', sensitive: true },
-  { term: 'DTF', meaning: 'Down to f*ck (explicit).', sensitive: true },
-  { term: 'Finsta', meaning: 'Fake/secondary Instagram account.', sensitive: true },
-  { term: 'Flaming', meaning: 'Sending abusive or obscene messages.', sensitive: true },
-  { term: 'FWB', meaning: 'Friends with benefits.', sensitive: true },
-  { term: 'GFY', meaning: 'Go f*ck yourself (abusive).', sensitive: true },
-  { term: 'Ghost', meaning: 'Cut contact / ignore on purpose.', sensitive: true },
-  { term: 'GNOC', meaning: 'Get naked on cam (explicit).', sensitive: true },
-  { term: 'GYPO', meaning: 'Get your pants off (explicit).', sensitive: true },
-  { term: 'IWSN', meaning: 'I want sex now (explicit).', sensitive: true },
-  { term: 'KMS', meaning: 'Kill myself (self-harm).', sensitive: true },
-  { term: 'KPC', meaning: 'Keep parents clueless.', sensitive: true },
-  { term: 'KYS', meaning: 'Kill yourself (abusive / self-harm).', sensitive: true },
-  { term: 'LMIRL', meaning: 'Let’s meet in real life (safety risk).', sensitive: true },
-  { term: 'Netflix and chill', meaning: 'Implied hookup while “watching.”', sensitive: true },
-  { term: 'NIFOC', meaning: 'Naked in front of computer (explicit).', sensitive: true },
-  { term: 'NP4NP', meaning: 'Nude pic for nude pic (explicit).', sensitive: true },
-  { term: 'NSFW', meaning: 'Not safe for work (mature content).', sensitive: true },
-  { term: 'OC (open crib)', meaning: 'Parents not home (risk cue).', sensitive: true },
-  { term: 'PAW / PRW', meaning: 'Parents are watching / in room.', sensitive: true },
-  { term: 'PIR', meaning: 'Parents in room.', sensitive: true },
-  { term: 'POS', meaning: 'Parents over shoulder.', sensitive: true },
-  { term: 'Pron', meaning: '“Porn” spelled to bypass filters.', sensitive: true },
-  { term: 'P911', meaning: 'Parents watching; be careful.', sensitive: true },
-  { term: 'Ship', meaning: 'Support a relationship (fandom slang).', sensitive: true },
-  { term: 'Smash', meaning: 'Have casual sex (slang).', sensitive: true },
-  { term: 'Snack', meaning: 'Attractive person (objectifying).', sensitive: true },
-  { term: 'TDTM', meaning: 'Talk dirty to me (explicit).', sensitive: true },
-  { term: 'Thicc', meaning: 'Curvy/sexualized compliment.', sensitive: true },
-  { term: 'Thirsty', meaning: 'Attention/validation seeking (often sexual).', sensitive: true },
-  { term: 'Throw shade', meaning: 'Subtle insult / dig at someone.', sensitive: true },
-  { term: 'WAP', meaning: 'Explicit sexual slang (song title).', sensitive: true },
-  { term: 'WTTP', meaning: 'Want to trade pictures (often sexual).', sensitive: true },
-  { term: 'X', meaning: 'Ecstasy (drug).', sensitive: true },
-  { term: 'Xan', meaning: 'Xanax (misuse/abuse context).', sensitive: true },
-  { term: '53x', meaning: 'Leetspeak for “sex.”', sensitive: true },
-  { term: '8', meaning: 'Oral sex (coded).', sensitive: true },
-  { term: '9', meaning: 'A parent is watching (coded).', sensitive: true },
-  { term: '420', meaning: 'Marijuana.', sensitive: true },
-];
+  return (
+    <div className="section" style={{ borderColor: '#ffd700', background: 'rgba(255, 215, 0, 0.1)', marginTop: '20px' }}>
+      <h2 style={{ color: '#ffd700' }}>{title}</h2>
+      <table style={{ width: '100%', textAlign: 'left', borderCollapse: 'collapse' }}>
+        <thead>
+          <tr style={{ borderBottom: '1px solid rgba(255,255,255,0.2)' }}>
+            <th style={{ padding: '8px' }}>#</th>
+            <th style={{ padding: '8px' }}>{userLabel}</th>
+            <th style={{ padding: '8px', textAlign: 'right' }}>{countLabel}</th>
+          </tr>
+        </thead>
+        <tbody>
+          {leaders.map((l, index) => (
+            <tr key={l.user} style={{ borderBottom: '1px solid rgba(255,255,255,0.05)' }}>
+              <td style={{ padding: '8px' }}>{index + 1}</td>
+              <td style={{ padding: '8px', fontWeight: 'bold' }}>{l.user}</td>
+              <td style={{ padding: '8px', textAlign: 'right' }}>{l.count}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  );
+}
 
-function normalize(s) { return s.toLowerCase().trim() }
+export default function Slang({ lang }){
+  usePageTracking('Slang'); // 开启追踪
 
-// Modified Component Signature to accept customList and onSubmitTerm
-export default function Slang({ lang, customList = [], onSubmitTerm }){
   const t = locales[lang];
   const [query, setQuery] = useState('')
   const [revealed, setRevealed] = useState(() => new Set())
+  const [dbTerms, setDbTerms] = useState([])
 
   // Form State
   const [newTerm, setNewTerm] = useState('')
   const [newMeaning, setNewMeaning] = useState('')
-  const [submitStatus, setSubmitStatus] = useState(null) // null, 'success', 'error'
+  const [submitStatus, setSubmitStatus] = useState(null)
+
+  // Fetch approved terms from DB
+  useEffect(() => {
+    fetchDbTerms();
+  }, []);
+
+  async function fetchDbTerms() {
+    try {
+      const res = await client.graphql({
+        query: listSlangTerms,
+        authMode: 'API_KEY'
+      });
+      setDbTerms(res.data.listSlangTerms.items);
+    } catch (e) {
+      console.log('Error fetching terms', e);
+    }
+  }
 
   const sorted = useMemo(() => {
-    // Merge static terms with approved custom terms
-    const combinedNormal = [...NORMAL_TERMS, ...CN_SLANG, ...customList]
+    // Merge static terms with DB terms
+    const combinedNormal = [...NORMAL_TERMS, ...CN_SLANG, ...dbTerms]
       .sort((a,b)=>a.term.localeCompare(b.term))
 
     const sens = [...SENSITIVE_TERMS].sort((a,b)=>a.term.localeCompare(b.term))
     return { norm: combinedNormal, sens }
-  }, [customList]) // dependency updated
+  }, [dbTerms])
 
   const allTerms = useMemo(() => [...sorted.norm, ...sorted.sens], [sorted])
   const map = useMemo(() => {
@@ -205,19 +129,33 @@ export default function Slang({ lang, customList = [], onSubmitTerm }){
     const next = new Set(revealed); next.add(term); setRevealed(next)
   }
 
-  const handleFormSubmit = (e) => {
+  const handleFormSubmit = async (e) => {
     e.preventDefault();
     if (!newTerm.trim() || !newMeaning.trim()) {
       setSubmitStatus('error');
       return;
     }
-    // Call the function passed from App.jsx
-    if (onSubmitTerm) {
-      onSubmitTerm(newTerm, newMeaning);
+
+    try {
+      await client.graphql({
+        query: createContribution,
+        variables: {
+          input: {
+            type: 'ADD',
+            term: newTerm,
+            proposedMeaning: newMeaning,
+            status: 'PENDING'
+          }
+        },
+        authMode: 'AMAZON_COGNITO_USER_POOLS' // 假设提交需要登录，或者如果允许匿名提交改为 API_KEY
+      });
       setNewTerm('');
       setNewMeaning('');
       setSubmitStatus('success');
       setTimeout(() => setSubmitStatus(null), 3000);
+    } catch (err) {
+      console.error(err);
+      alert('提交失败，请先登录');
     }
   }
 
@@ -284,7 +222,9 @@ export default function Slang({ lang, customList = [], onSubmitTerm }){
           <p className="tip">{t.cnSlangLead}</p>
         </div>
 
-        {/* --- Submission Form Section --- */}
+        {/* 排行榜 */}
+        <Leaderboard lang={lang} />
+
         <div className="section submit-section" style={{ marginTop: '3rem', padding: '1.5rem', background: 'var(--card-bg)', borderRadius: '12px', border: '1px solid var(--border)' }}>
           <h2>{t.submitH2}</h2>
           <p>{t.submitLead}</p>
@@ -316,6 +256,8 @@ export default function Slang({ lang, customList = [], onSubmitTerm }){
     </div>
   )
 }
+
+function normalize(s) { return s.toLowerCase().trim() }
 
 function Row({ item }) {
   return (

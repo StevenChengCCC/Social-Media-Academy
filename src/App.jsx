@@ -10,6 +10,8 @@ import Discord from './pages/Discord.jsx'
 import Slang from './pages/Slang.jsx'
 import LinkedIn from './pages/LinkedIn.jsx'
 import Play from './pages/Play.jsx'
+import AuthPage from './pages/Auth.jsx' // 导入登录页面
+import AdminDashboard from './pages/AdminDashboard.jsx'
 
 import './app.css'
 
@@ -65,15 +67,7 @@ const locales = {
     ytCaption: 'Tip: This video content is from YouTube. If it fails to load or watch, try using a VPN.',
     ytTitle: 'Watch Video Tutorial',
     backToHome: '← Back to Home',
-    // Admin Locales
-    adminTitle: 'Admin Dashboard',
-    adminLogin: 'Enter Password to Access',
-    adminPending: 'Pending Review',
-    adminApproved: 'Approved Terms',
-    approveBtn: 'Approve',
-    rejectBtn: 'Reject/Delete',
-    emptyList: 'No terms found.',
-    logout: 'Logout'
+    login: 'Login / Admin'
   },
   'zh-CN': {
     siteTitle: '社交媒体学院',
@@ -116,15 +110,7 @@ const locales = {
     ytCaption: '提示：该视频内容来自YouTube，若无法加载或观看，请尝试科学上网。',
     ytTitle: '观看视频教程',
     backToHome: '← 返回首页',
-    // Admin Locales
-    adminTitle: '管理员控制台',
-    adminLogin: '输入密码以访问',
-    adminPending: '待审核',
-    adminApproved: '已批准词条',
-    approveBtn: '批准',
-    rejectBtn: '拒绝/删除',
-    emptyList: '暂无词条。',
-    logout: '退出'
+    login: '登录 / 管理员'
   },
 };
 // --- END: Localization Data ---
@@ -186,88 +172,6 @@ export function YouTubeVideo({ videoId, title, lang }) {
   )
 }
 
-// --- NEW: Admin Dashboard Component ---
-function AdminDashboard({ lang, allTerms, onApprove, onReject }) {
-  const t = locales[lang];
-  const [password, setPassword] = useState('');
-  const [auth, setAuth] = useState(false);
-
-  const checkPass = (e) => {
-    e.preventDefault();
-    if (password === 'admin123') setAuth(true); // Simple mock password
-    else alert('Wrong password');
-  }
-
-  const pending = allTerms.filter(item => !item.approved);
-  const approved = allTerms.filter(item => item.approved);
-
-  if (!auth) {
-    return (
-      <div className="page" style={{display:'flex', alignItems:'center', justifyContent:'center', minHeight:'60vh'}}>
-        <BackToHomeLink lang={lang} />
-        <form onSubmit={checkPass} style={{textAlign:'center', border: '1px solid var(--border)', padding:'2rem', borderRadius:'12px'}}>
-          <h2>{t.adminLogin}</h2>
-          <input
-            type="password"
-            className="slang-input"
-            value={password}
-            onChange={e=>setPassword(e.target.value)}
-            style={{marginBottom:'1rem'}}
-          />
-          <br/>
-          <button type="submit" className="reveal-btn">{t.adminTitle}</button>
-        </form>
-      </div>
-    )
-  }
-
-  return (
-    <div className="page">
-      <div style={{display:'flex', justifyContent:'space-between', alignItems:'center'}}>
-        <BackToHomeLink lang={lang} />
-        <button className="reveal-btn" onClick={()=>setAuth(false)} style={{background:'red'}}>{t.logout}</button>
-      </div>
-
-      <div className="doc">
-        <h1>{t.adminTitle}</h1>
-
-        <div className="section">
-          <h2 style={{color: 'orange'}}>{t.adminPending} ({pending.length})</h2>
-          {pending.length === 0 && <p>{t.emptyList}</p>}
-          <ul className="slang-list">
-            {pending.map(item => (
-              <li key={item.id} className="slang-row" style={{display:'flex', justifyContent:'space-between', alignItems:'center'}}>
-                <div>
-                  <b className="slang-term">{item.term}</b>: {item.meaning}
-                </div>
-                <div style={{display:'flex', gap:'10px'}}>
-                  <button onClick={()=>onApprove(item.id)} className="reveal-btn" style={{background:'green', fontSize:'0.8rem'}}>{t.approveBtn}</button>
-                  <button onClick={()=>onReject(item.id)} className="reveal-btn" style={{background:'red', fontSize:'0.8rem'}}>{t.rejectBtn}</button>
-                </div>
-              </li>
-            ))}
-          </ul>
-        </div>
-
-        <div className="section">
-          <h2>{t.adminApproved} ({approved.length})</h2>
-          {approved.length === 0 && <p>{t.emptyList}</p>}
-          <ul className="slang-list">
-            {approved.map(item => (
-              <li key={item.id} className="slang-row" style={{display:'flex', justifyContent:'space-between', alignItems:'center'}}>
-                <div>
-                  <b className="slang-term">{item.term}</b>: {item.meaning}
-                </div>
-                <button onClick={()=>onReject(item.id)} className="reveal-btn" style={{background:'var(--subtext)', fontSize:'0.8rem'}}>{t.rejectBtn}</button>
-              </li>
-            ))}
-          </ul>
-        </div>
-      </div>
-    </div>
-  )
-}
-
 export default function App() {
   // 1. Theme state
   const [theme, setTheme] = useState(() => {
@@ -286,15 +190,6 @@ export default function App() {
     return 'en';
   });
 
-  // 3. User Submitted Terms State (Persistent)
-  const [userTerms, setUserTerms] = useState(() => {
-    if (typeof window !== 'undefined') {
-      const saved = localStorage.getItem('userTerms');
-      return saved ? JSON.parse(saved) : [];
-    }
-    return [];
-  });
-
   // Effect for theme
   useEffect(() => {
     const root = document.documentElement;
@@ -310,34 +205,6 @@ export default function App() {
   useEffect(() => {
     localStorage.setItem('lang', lang);
   }, [lang]);
-
-  // Effect for userTerms persistence
-  useEffect(() => {
-    localStorage.setItem('userTerms', JSON.stringify(userTerms));
-  }, [userTerms]);
-
-  // Actions for Slang
-  const handleAddTerm = (term, meaning) => {
-    const newEntry = {
-      id: Date.now(), // simple unique ID
-      term: term,
-      meaning: meaning,
-      approved: false, // Default pending
-      sensitive: false
-    };
-    setUserTerms(prev => [...prev, newEntry]);
-  };
-
-  const handleApproveTerm = (id) => {
-    setUserTerms(prev => prev.map(item => item.id === id ? {...item, approved: true} : item));
-  };
-
-  const handleRejectTerm = (id) => {
-    setUserTerms(prev => prev.filter(item => item.id !== id));
-  };
-
-  // Filter only approved terms for the public Slang page
-  const approvedCustomTerms = useMemo(() => userTerms.filter(t => t.approved), [userTerms]);
 
   const toggleTheme = () => {
     setTheme(currentTheme => (currentTheme === 'dark' ? 'light' : 'dark'));
@@ -356,16 +223,9 @@ export default function App() {
 
       <Routes>
         <Route path="/" element={<Home t={t} />} />
-        {/* Pass custom approved list and submit handler to Slang */}
-        <Route
-          path="/slang"
-          element={<Slang lang={lang} customList={approvedCustomTerms} onSubmitTerm={handleAddTerm} />}
-        />
-        {/* New Admin Route - pass all terms and handlers */}
-        <Route
-          path="/admin"
-          element={<AdminDashboard lang={lang} allTerms={userTerms} onApprove={handleApproveTerm} onReject={handleRejectTerm} />}
-        />
+        <Route path="/slang" element={<Slang lang={lang} />} />
+        <Route path="/admin" element={<AdminDashboard lang={lang} />} />
+        <Route path="/login" element={<AuthPage lang={lang} />} />
 
         <Route path="/instagram" element={<Instagram lang={lang} />} />
         <Route path="/tiktok" element={<TikTok lang={lang} />} />
@@ -454,9 +314,8 @@ function Home({ t }) {
 
       <footer className="footer">
         <span>{t.footer(new Date().getFullYear())}</span>
-        {/* Simple Link to Admin at bottom */}
         <span style={{marginLeft: '15px', opacity: 0.5}}>
-          <Link to="/admin" style={{color: 'inherit', textDecoration: 'none'}}>Admin</Link>
+          <Link to="/login" style={{color: 'inherit', textDecoration: 'none'}}>{t.login}</Link>
         </span>
       </footer>
     </div>

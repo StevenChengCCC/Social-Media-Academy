@@ -59,6 +59,7 @@ class SpatialHash {
 }
 
 export default function Play({ lang }) {
+    usePageTracking('Play');
   const t = locales[lang];
   return (
     <div className="page">

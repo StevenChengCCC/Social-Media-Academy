@@ -88,9 +88,10 @@ const locales = {
     }
   }
 };
-// --- END: Localization Data for TikTok Page ---
 
 export default function TikTok({ lang }){
+  usePageTracking('TikTok');
+
   const t = locales[lang];
   const s = t.sections;
   return (
@@ -99,7 +100,6 @@ export default function TikTok({ lang }){
       <div className="doc tiktok">
         <h1>{t.title}</h1>
         <p className="lead">{t.lead}</p>
-
         <div className="section">
           <h2>{s.privacy.h2}</h2>
           <span className="pill">{s.privacy.pill1}</span>
@@ -112,7 +112,6 @@ export default function TikTok({ lang }){
             <li>{s.privacy.steps[3]}</li>
           </ol>
         </div>
-
         <div className="section">
           <h2>{s.contentSafety.h2}</h2>
           <span className="pill">{s.contentSafety.pill1}</span>
@@ -123,7 +122,6 @@ export default function TikTok({ lang }){
             <li>{s.contentSafety.steps[2]}</li>
           </ol>
         </div>
-
         <div className="section">
           <h2>{s.screenTime.h2}</h2>
           <span className="pill">{s.screenTime.pill1}</span>
@@ -135,7 +133,6 @@ export default function TikTok({ lang }){
             <li>{s.screenTime.steps[2]}</li>
           </ol>
         </div>
-
         <div className="section">
           <h2>{s.pairing.h2}</h2>
           <span className="pill">{s.pairing.pill1}</span>
@@ -144,8 +141,6 @@ export default function TikTok({ lang }){
             <li>{s.pairing.steps[1]}</li>
           </ol>
         </div>
-
-        {/* Updated Videos */}
         <YouTubeVideo videoId="j1x-kW3mWXk" title={t.ytTitles.pairing} lang={lang} />
         <YouTubeVideo videoId="vpKksQLxfaU" title={t.ytTitles.safety} lang={lang} />
       </div>

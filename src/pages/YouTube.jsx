@@ -86,6 +86,7 @@ const locales = {
 // --- END: Localization Data for YouTube Page ---
 
 export default function YouTube({ lang }){
+    usePageTracking('YouTube');
   const t = locales[lang];
   const s = t.sections;
   return (

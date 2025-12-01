@@ -91,6 +91,7 @@ const locales = {
 
 
 export default function Facebook({ lang }){
+    usePageTracking('Facebook');
   const t = locales[lang];
   const s = t.sections;
   return (

@@ -47,9 +47,9 @@ export const getContribution = /* GraphQL */ `
       note
       status
       adminResponse
+      owner
       createdAt
       updatedAt
-      owner
       __typename
     }
   }
@@ -69,9 +69,49 @@ export const listContributions = /* GraphQL */ `
         note
         status
         adminResponse
+        owner
         createdAt
         updatedAt
-        owner
+        __typename
+      }
+      nextToken
+      __typename
+    }
+  }
+`;
+export const getUserAnalytics = /* GraphQL */ `
+  query GetUserAnalytics($id: ID!) {
+    getUserAnalytics(id: $id) {
+      id
+      userId
+      isAnonymous
+      page
+      durationSeconds
+      clickCount
+      timestamp
+      createdAt
+      updatedAt
+      __typename
+    }
+  }
+`;
+export const listUserAnalytics = /* GraphQL */ `
+  query ListUserAnalytics(
+    $filter: ModelUserAnalyticsFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    listUserAnalytics(filter: $filter, limit: $limit, nextToken: $nextToken) {
+      items {
+        id
+        userId
+        isAnonymous
+        page
+        durationSeconds
+        clickCount
+        timestamp
+        createdAt
+        updatedAt
         __typename
       }
       nextToken

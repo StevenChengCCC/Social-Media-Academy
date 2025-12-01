@@ -87,6 +87,7 @@ const locales = {
 };
 
 export default function Discord({ lang }){
+    usePageTracking('Discord');
   const t = locales[lang];
   const s = t.sections;
   return (

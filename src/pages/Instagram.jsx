@@ -1,5 +1,6 @@
 import React from 'react'
 import { YouTubeVideo, BackToHomeLink } from '../App.jsx'
+import { usePageTracking } from '../hooks/usePageTracking'
 
 // --- START: Localization Data for Instagram Page ---
 const locales = {
@@ -84,6 +85,8 @@ const locales = {
   }
 };
 export default function Instagram({ lang }){
+  usePageTracking('Instagram');
+
   const t = locales[lang];
   const s = t.sections;
 
@@ -93,7 +96,6 @@ export default function Instagram({ lang }){
       <div className="doc instagram">
         <h1>{t.title}</h1>
         <p className="lead">{t.lead}</p>
-
         <div className="section">
           <h2>{s.privacy.h2}</h2>
           <span className="pill">{s.privacy.pill1}</span>
@@ -107,7 +109,6 @@ export default function Instagram({ lang }){
           </ol>
           <div className="tip">{s.privacy.tip}</div>
         </div>
-
         <div className="section">
           <h2>{s.footprint.h2}</h2>
           <span className="pill">{s.footprint.pill1}</span>
@@ -118,7 +119,6 @@ export default function Instagram({ lang }){
             <li>{s.footprint.steps[2]}</li>
           </ol>
         </div>
-
         <div className="section">
           <h2>{s.usage.h2}</h2>
           <span className="pill">{s.usage.pill1}</span>
@@ -128,7 +128,6 @@ export default function Instagram({ lang }){
             <li>{s.usage.steps[1]}</li>
           </ol>
         </div>
-
         <div className="section">
           <h2>{s.supervision.h2}</h2>
           <span className="pill">{s.supervision.pill1}</span>
@@ -137,10 +136,7 @@ export default function Instagram({ lang }){
             <li>{s.supervision.steps[1]}</li>
           </ol>
         </div>
-
         <YouTubeVideo videoId="n6H3_5eGv0c" title={t.ytTitle} lang={lang} />
-
-
         <YouTubeVideo videoId="V8P6T6y7q-o" title={lang === 'en' ? "How to set up Supervision on Instagram" : "如何在 Instagram 设置家长监督功能"} lang={lang} />
       </div>
     </div>
