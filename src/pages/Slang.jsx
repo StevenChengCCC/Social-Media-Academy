@@ -292,7 +292,6 @@ export default function Slang({ lang }){
     }
 
     try {
-      // ✅ 3. 使用内部的 client 提交，这会自动附带 Auth Token
       await client.graphql({
         query: createContribution,
         variables: {
@@ -303,23 +302,17 @@ export default function Slang({ lang }){
             status: 'PENDING'
           }
         },
-        authMode: 'AMAZON_COGNITO_USER_POOLS'
+        authMode: 'API_KEY'
       });
       setNewTerm('');
       setNewMeaning('');
       setSubmitStatus('success');
       setTimeout(() => setSubmitStatus(null), 3000);
     } catch (err) {
-      // 增加更详细的错误打印，方便调试
       console.error("Submission Failed:", err);
-      // 检查是否是权限错误
-      if (err.errors && err.errors[0].errorType === 'Unauthorized') {
-        alert('Session expired or invalid. Please log in again.');
-      } else {
-        alert('Submission failed. Check console for details.');
-      }
+      alert('Submission failed. Check console for details.');
     }
-  }
+}
 
   return (
     <div className="page">

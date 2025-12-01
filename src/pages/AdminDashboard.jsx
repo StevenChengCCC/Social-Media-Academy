@@ -24,7 +24,6 @@ export default function AdminDashboard({ lang }) {
     }
   }, [isAdmin, view])
 
-  // ✅ 核心修复：检查用户组权限 (Admins)
   async function checkAdmin() {
     try {
       const session = await fetchAuthSession();
@@ -60,13 +59,14 @@ export default function AdminDashboard({ lang }) {
     try {
       const res = await client.graphql({
         query: listUserAnalytics,
-        variables: { limit: 100 }
+        variables: { limit: 100 },
+        authMode: 'API_KEY'
       });
       setAnalyticsData(res.data.listUserAnalytics.items);
     } catch (e) {
       console.error("Fetch analytics error", e);
     }
-  }
+}
 
   const handleApprove = async (item) => {
     try {
