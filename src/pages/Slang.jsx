@@ -23,7 +23,15 @@ const locales = {
     cnSlangLead: 'Chinese internet slang is often derived from Pinyin initials or specific cultural memes. We list some popular terms here for context.',
     ytTitles: {
       decoded: 'Teen Slang Guide for Parents',
-    }
+    },
+    // --- New Form Locales ---
+    submitH2: 'Contribute to the Dictionary',
+    submitLead: 'Know a slang term we missed? Submit it below for review. Once approved by an admin, it will appear in the list.',
+    inputTerm: 'Slang Term (e.g., Riz)',
+    inputMeaning: 'Meaning / Context',
+    submitBtn: 'Submit for Review',
+    submitSuccess: 'Thanks! Your term has been submitted for moderation.',
+    fillError: 'Please fill in both fields.'
   },
   'zh-CN': {
     title: '俚语词典',
@@ -41,7 +49,15 @@ const locales = {
     cnSlangLead: '中文网络俚语通常来源于拼音首字母或特定的文化梗。我们在此列出一些热门词汇以供参考。',
     ytTitles: {
       decoded: '青少年短信暗语解读',
-    }
+    },
+    // --- New Form Locales ---
+    submitH2: '贡献词条',
+    submitLead: '知道我们遗漏的俚语吗？在下方提交以供审核。管理员批准后，它将出现在列表中。',
+    inputTerm: '俚语词汇 (例如：Rizz)',
+    inputMeaning: '含义 / 语境',
+    submitBtn: '提交审核',
+    submitSuccess: '谢谢！您的词条已提交，等待审核。',
+    fillError: '请填写两个字段。'
   }
 };
 // --- END: Localization Data for Slang Page ---
@@ -151,16 +167,25 @@ const SENSITIVE_TERMS = [
 
 function normalize(s) { return s.toLowerCase().trim() }
 
-export default function Slang({ lang }){
+// Modified Component Signature to accept customList and onSubmitTerm
+export default function Slang({ lang, customList = [], onSubmitTerm }){
   const t = locales[lang];
   const [query, setQuery] = useState('')
   const [revealed, setRevealed] = useState(() => new Set())
 
+  // Form State
+  const [newTerm, setNewTerm] = useState('')
+  const [newMeaning, setNewMeaning] = useState('')
+  const [submitStatus, setSubmitStatus] = useState(null) // null, 'success', 'error'
+
   const sorted = useMemo(() => {
-    const combinedNormal = [...NORMAL_TERMS, ...CN_SLANG].sort((a,b)=>a.term.localeCompare(b.term))
+    // Merge static terms with approved custom terms
+    const combinedNormal = [...NORMAL_TERMS, ...CN_SLANG, ...customList]
+      .sort((a,b)=>a.term.localeCompare(b.term))
+
     const sens = [...SENSITIVE_TERMS].sort((a,b)=>a.term.localeCompare(b.term))
     return { norm: combinedNormal, sens }
-  }, [])
+  }, [customList]) // dependency updated
 
   const allTerms = useMemo(() => [...sorted.norm, ...sorted.sens], [sorted])
   const map = useMemo(() => {
@@ -178,6 +203,22 @@ export default function Slang({ lang }){
 
   const reveal = (term) => {
     const next = new Set(revealed); next.add(term); setRevealed(next)
+  }
+
+  const handleFormSubmit = (e) => {
+    e.preventDefault();
+    if (!newTerm.trim() || !newMeaning.trim()) {
+      setSubmitStatus('error');
+      return;
+    }
+    // Call the function passed from App.jsx
+    if (onSubmitTerm) {
+      onSubmitTerm(newTerm, newMeaning);
+      setNewTerm('');
+      setNewMeaning('');
+      setSubmitStatus('success');
+      setTimeout(() => setSubmitStatus(null), 3000);
+    }
   }
 
   return (
@@ -214,7 +255,7 @@ export default function Slang({ lang }){
           <h2>{t.commonH2}</h2>
           <ul className="slang-list">
             {sorted.norm.map((item)=>(
-              <li key={item.term}><Row item={item} /></li>
+              <li key={item.term + item.meaning}><Row item={item} /></li>
             ))}
           </ul>
         </div>
@@ -241,6 +282,33 @@ export default function Slang({ lang }){
         <div className="section">
           <h2>{t.cnSlangH2}</h2>
           <p className="tip">{t.cnSlangLead}</p>
+        </div>
+
+        {/* --- Submission Form Section --- */}
+        <div className="section submit-section" style={{ marginTop: '3rem', padding: '1.5rem', background: 'var(--card-bg)', borderRadius: '12px', border: '1px solid var(--border)' }}>
+          <h2>{t.submitH2}</h2>
+          <p>{t.submitLead}</p>
+          <form onSubmit={handleFormSubmit} className="slang-form">
+            <div style={{ display: 'grid', gap: '1rem', marginBottom: '1rem' }}>
+              <input
+                className="slang-input"
+                style={{ width: '100%' }}
+                placeholder={t.inputTerm}
+                value={newTerm}
+                onChange={e => setNewTerm(e.target.value)}
+              />
+              <input
+                className="slang-input"
+                style={{ width: '100%' }}
+                placeholder={t.inputMeaning}
+                value={newMeaning}
+                onChange={e => setNewMeaning(e.target.value)}
+              />
+            </div>
+            <button type="submit" className="reveal-btn" style={{ padding: '0.6rem 1.2rem' }}>{t.submitBtn}</button>
+            {submitStatus === 'success' && <p style={{ color: 'green', marginTop: '0.5rem' }}>{t.submitSuccess}</p>}
+            {submitStatus === 'error' && <p style={{ color: 'red', marginTop: '0.5rem' }}>{t.fillError}</p>}
+          </form>
         </div>
 
         <YouTubeVideo videoId="8_I2sg8Z7Yk" title={t.ytTitles.decoded} lang={lang} />

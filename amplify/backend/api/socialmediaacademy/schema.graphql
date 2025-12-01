@@ -1,0 +1,48 @@
+# 1. 枚举类型
+enum SlangCategory {
+  STANDARD    # 对应你原来的 NORMAL_TERMS
+  CHINESE     # 对应你原来的 CN_SLANG
+  SENSITIVE   # 对应你原来的 SENSITIVE_TERMS
+}
+
+enum RequestType {
+  ADD         # 申请添加新词
+  EDIT        # 申请修改现有词
+  QUESTION    # 提问/求解释
+}
+
+enum RequestStatus {
+  PENDING     # 待审核
+  APPROVED    # 已通过
+  REJECTED    # 已拒绝
+}
+
+# 2. 正式发布的俚语词条
+type SlangTerm @model @auth(rules: [
+  # 所有人(包括未登录)都可以读
+  { allow: public, operations: [read] },
+  # 只有 Admin 组可以增删改
+  { allow: groups, groups: ["Admins"], operations: [create, update, delete] }
+]) {
+  id: ID!
+  term: String!
+  meaning: String!
+  category: SlangCategory!
+  example: String
+}
+
+# 3. 用户的贡献/请求
+type Contribution @model @auth(rules: [
+  # 用户可以创建，且只能看到自己的
+  { allow: owner, operations: [create, read] },
+  # 管理员可以管理所有
+  { allow: groups, groups: ["Admins"], operations: [create, read, update, delete] }
+]) {
+  id: ID!
+  type: RequestType!
+  term: String!           # 涉及的单词
+  proposedMeaning: String # 建议的意思 (如果是提问，这里可能为空)
+  note: String            # 用户的备注/理由
+  status: RequestStatus!
+  adminResponse: String   # 管理员的回复
+}

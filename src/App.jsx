@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react'
-import { BrowserRouter, Routes, Route, Link } from 'react-router-dom'
+import React, { useState, useEffect, useMemo } from 'react'
+import { BrowserRouter, Routes, Route, Link, useNavigate } from 'react-router-dom'
 
 // Pages
 import Instagram from './pages/Instagram.jsx'
@@ -13,7 +13,7 @@ import Play from './pages/Play.jsx'
 
 import './app.css'
 
-// Local assets used on Home cards (可保留你已有的6张图路径)
+// Local assets used on Home cards
 import LogoSlang from './assets/slang_dictionary.png'
 import LogoDiscord from './assets/discord-1024x576.jpg'
 import LogoYouTube from './assets/youtubeLogo-1.png'
@@ -64,7 +64,16 @@ const locales = {
     toggleEN: 'English',
     ytCaption: 'Tip: This video content is from YouTube. If it fails to load or watch, try using a VPN.',
     ytTitle: 'Watch Video Tutorial',
-    backToHome: '← Back to Home', // ADDED
+    backToHome: '← Back to Home',
+    // Admin Locales
+    adminTitle: 'Admin Dashboard',
+    adminLogin: 'Enter Password to Access',
+    adminPending: 'Pending Review',
+    adminApproved: 'Approved Terms',
+    approveBtn: 'Approve',
+    rejectBtn: 'Reject/Delete',
+    emptyList: 'No terms found.',
+    logout: 'Logout'
   },
   'zh-CN': {
     siteTitle: '社交媒体学院',
@@ -93,7 +102,7 @@ const locales = {
       },
       linkedin: {
         title: '领英 (LinkedIn)', desc: '面向学校和职业的专业社交平台。控制您的公开资料、限制数据共享，并保持通知集中。'
-      }
+      },
     },
     playLink: '🎮 试玩一个微型物理小游戏 (石头剪刀布粒子)',
     footer: (year) => `© ${year} 社交媒体学院`,
@@ -106,13 +115,22 @@ const locales = {
     toggleEN: 'English',
     ytCaption: '提示：该视频内容来自YouTube，若无法加载或观看，请尝试科学上网。',
     ytTitle: '观看视频教程',
-    backToHome: '← 返回首页', // ADDED
+    backToHome: '← 返回首页',
+    // Admin Locales
+    adminTitle: '管理员控制台',
+    adminLogin: '输入密码以访问',
+    adminPending: '待审核',
+    adminApproved: '已批准词条',
+    approveBtn: '批准',
+    rejectBtn: '拒绝/删除',
+    emptyList: '暂无词条。',
+    logout: '退出'
   },
 };
 // --- END: Localization Data ---
 
 
-// ADDED: Back to Home Link Component
+// Back to Home Link Component
 export function BackToHomeLink({ lang }) {
   const t = locales[lang];
   return (
@@ -124,7 +142,7 @@ export function BackToHomeLink({ lang }) {
   );
 }
 
-// ADDED: Theme Toggle Component
+// Theme Toggle Component
 function ThemeToggle({ theme, toggleTheme, lang }) {
   const t = locales[lang];
   const icon = theme === 'dark' ? '🌙' : '☀️';
@@ -136,7 +154,7 @@ function ThemeToggle({ theme, toggleTheme, lang }) {
   );
 }
 
-// ADDED: Language Toggle Component
+// Language Toggle Component
 function LanguageToggle({ lang, toggleLang }) {
   const label = lang === 'en' ? locales['zh-CN'].toggleCN : locales['en'].toggleEN;
   const icon = lang === 'en' ? '🇨🇳' : '🇬🇧';
@@ -168,8 +186,90 @@ export function YouTubeVideo({ videoId, title, lang }) {
   )
 }
 
+// --- NEW: Admin Dashboard Component ---
+function AdminDashboard({ lang, allTerms, onApprove, onReject }) {
+  const t = locales[lang];
+  const [password, setPassword] = useState('');
+  const [auth, setAuth] = useState(false);
+
+  const checkPass = (e) => {
+    e.preventDefault();
+    if (password === 'admin123') setAuth(true); // Simple mock password
+    else alert('Wrong password');
+  }
+
+  const pending = allTerms.filter(item => !item.approved);
+  const approved = allTerms.filter(item => item.approved);
+
+  if (!auth) {
+    return (
+      <div className="page" style={{display:'flex', alignItems:'center', justifyContent:'center', minHeight:'60vh'}}>
+        <BackToHomeLink lang={lang} />
+        <form onSubmit={checkPass} style={{textAlign:'center', border: '1px solid var(--border)', padding:'2rem', borderRadius:'12px'}}>
+          <h2>{t.adminLogin}</h2>
+          <input
+            type="password"
+            className="slang-input"
+            value={password}
+            onChange={e=>setPassword(e.target.value)}
+            style={{marginBottom:'1rem'}}
+          />
+          <br/>
+          <button type="submit" className="reveal-btn">{t.adminTitle}</button>
+        </form>
+      </div>
+    )
+  }
+
+  return (
+    <div className="page">
+      <div style={{display:'flex', justifyContent:'space-between', alignItems:'center'}}>
+        <BackToHomeLink lang={lang} />
+        <button className="reveal-btn" onClick={()=>setAuth(false)} style={{background:'red'}}>{t.logout}</button>
+      </div>
+
+      <div className="doc">
+        <h1>{t.adminTitle}</h1>
+
+        <div className="section">
+          <h2 style={{color: 'orange'}}>{t.adminPending} ({pending.length})</h2>
+          {pending.length === 0 && <p>{t.emptyList}</p>}
+          <ul className="slang-list">
+            {pending.map(item => (
+              <li key={item.id} className="slang-row" style={{display:'flex', justifyContent:'space-between', alignItems:'center'}}>
+                <div>
+                  <b className="slang-term">{item.term}</b>: {item.meaning}
+                </div>
+                <div style={{display:'flex', gap:'10px'}}>
+                  <button onClick={()=>onApprove(item.id)} className="reveal-btn" style={{background:'green', fontSize:'0.8rem'}}>{t.approveBtn}</button>
+                  <button onClick={()=>onReject(item.id)} className="reveal-btn" style={{background:'red', fontSize:'0.8rem'}}>{t.rejectBtn}</button>
+                </div>
+              </li>
+            ))}
+          </ul>
+        </div>
+
+        <div className="section">
+          <h2>{t.adminApproved} ({approved.length})</h2>
+          {approved.length === 0 && <p>{t.emptyList}</p>}
+          <ul className="slang-list">
+            {approved.map(item => (
+              <li key={item.id} className="slang-row" style={{display:'flex', justifyContent:'space-between', alignItems:'center'}}>
+                <div>
+                  <b className="slang-term">{item.term}</b>: {item.meaning}
+                </div>
+                <button onClick={()=>onReject(item.id)} className="reveal-btn" style={{background:'var(--subtext)', fontSize:'0.8rem'}}>{t.rejectBtn}</button>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </div>
+    </div>
+  )
+}
+
 export default function App() {
-  // 1. Theme state and initialization
+  // 1. Theme state
   const [theme, setTheme] = useState(() => {
     if (typeof window !== 'undefined') {
       return localStorage.getItem('theme') || 'dark';
@@ -177,17 +277,25 @@ export default function App() {
     return 'dark';
   });
 
-  // 2. Language state and initialization
+  // 2. Language state
   const [lang, setLang] = useState(() => {
     if (typeof window !== 'undefined') {
-      // Default to user browser language if available and supported, otherwise 'en'
       const userLang = navigator.language.startsWith('zh') ? 'zh-CN' : 'en';
       return localStorage.getItem('lang') || userLang;
     }
     return 'en';
   });
 
-  // 3. Effect for theme
+  // 3. User Submitted Terms State (Persistent)
+  const [userTerms, setUserTerms] = useState(() => {
+    if (typeof window !== 'undefined') {
+      const saved = localStorage.getItem('userTerms');
+      return saved ? JSON.parse(saved) : [];
+    }
+    return [];
+  });
+
+  // Effect for theme
   useEffect(() => {
     const root = document.documentElement;
     if (theme === 'light') {
@@ -198,11 +306,38 @@ export default function App() {
     localStorage.setItem('theme', theme);
   }, [theme]);
 
-  // 4. Effect for language
+  // Effect for language
   useEffect(() => {
     localStorage.setItem('lang', lang);
   }, [lang]);
 
+  // Effect for userTerms persistence
+  useEffect(() => {
+    localStorage.setItem('userTerms', JSON.stringify(userTerms));
+  }, [userTerms]);
+
+  // Actions for Slang
+  const handleAddTerm = (term, meaning) => {
+    const newEntry = {
+      id: Date.now(), // simple unique ID
+      term: term,
+      meaning: meaning,
+      approved: false, // Default pending
+      sensitive: false
+    };
+    setUserTerms(prev => [...prev, newEntry]);
+  };
+
+  const handleApproveTerm = (id) => {
+    setUserTerms(prev => prev.map(item => item.id === id ? {...item, approved: true} : item));
+  };
+
+  const handleRejectTerm = (id) => {
+    setUserTerms(prev => prev.filter(item => item.id !== id));
+  };
+
+  // Filter only approved terms for the public Slang page
+  const approvedCustomTerms = useMemo(() => userTerms.filter(t => t.approved), [userTerms]);
 
   const toggleTheme = () => {
     setTheme(currentTheme => (currentTheme === 'dark' ? 'light' : 'dark'));
@@ -212,24 +347,31 @@ export default function App() {
     setLang(currentLang => (currentLang === 'en' ? 'zh-CN' : 'en'));
   };
 
-  // Get current localization dictionary
   const t = locales[lang];
 
   return (
     <BrowserRouter>
-      {/* Add the theme toggle button and language toggle button */}
       <ThemeToggle theme={theme} toggleTheme={toggleTheme} lang={lang} />
       <LanguageToggle lang={lang} toggleLang={toggleLang} />
 
       <Routes>
         <Route path="/" element={<Home t={t} />} />
-        {/* Pass 'lang' prop to all page components */}
+        {/* Pass custom approved list and submit handler to Slang */}
+        <Route
+          path="/slang"
+          element={<Slang lang={lang} customList={approvedCustomTerms} onSubmitTerm={handleAddTerm} />}
+        />
+        {/* New Admin Route - pass all terms and handlers */}
+        <Route
+          path="/admin"
+          element={<AdminDashboard lang={lang} allTerms={userTerms} onApprove={handleApproveTerm} onReject={handleRejectTerm} />}
+        />
+
         <Route path="/instagram" element={<Instagram lang={lang} />} />
         <Route path="/tiktok" element={<TikTok lang={lang} />} />
         <Route path="/youtube" element={<YouTube lang={lang} />} />
         <Route path="/facebook" element={<Facebook lang={lang} />} />
         <Route path="/discord" element={<Discord lang={lang} />} />
-        <Route path="/slang" element={<Slang lang={lang} />} />
         <Route path="/linkedin" element={<LinkedIn lang={lang} />} />
         <Route path="/play" element={<Play lang={lang} />} />
         <Route path="*" element={<NotFound t={t} />} />
@@ -237,7 +379,6 @@ export default function App() {
     </BrowserRouter>
   )
 }
-
 
 function Home({ t }) {
   return (
@@ -313,11 +454,14 @@ function Home({ t }) {
 
       <footer className="footer">
         <span>{t.footer(new Date().getFullYear())}</span>
+        {/* Simple Link to Admin at bottom */}
+        <span style={{marginLeft: '15px', opacity: 0.5}}>
+          <Link to="/admin" style={{color: 'inherit', textDecoration: 'none'}}>Admin</Link>
+        </span>
       </footer>
     </div>
   )
 }
-
 
 function WideTile({ to, img, title, desc }) {
   return (
