@@ -1,9 +1,8 @@
 import React from 'react'
 import { YouTubeVideo, BackToHomeLink } from '../App.jsx'
+import { usePageTracking } from '../hooks/usePageTracking'
 
-// --- START: Localization Data for Facebook Page ---
 const locales = {
-  // ... (locales data remains unchanged) ...
   'en': {
     title: 'Facebook — Privacy Checkup & Marketplace',
     lead: 'Privacy Checkup, audience selector, profile locking, face recognition off, and “Your Time on Facebook”.',
@@ -87,7 +86,6 @@ const locales = {
     ytTitle: 'Facebook 隐私检查和安全设置教程',
   }
 };
-// --- END: Localization Data for Facebook Page ---
 
 
 export default function Facebook({ lang }){

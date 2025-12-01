@@ -1,9 +1,8 @@
 import React from 'react'
 import { YouTubeVideo, BackToHomeLink } from '../App.jsx'
+import { usePageTracking } from '../hooks/usePageTracking'
 
-// --- START: Localization Data for Discord Page ---
 const locales = {
-  // ... (locales data remains unchanged) ...
   'en': {
     title: 'Discord — Privacy & Family Center',
     lead: 'DM scanning, friend request safety, server privacy, and Family Center supervision for teens.',

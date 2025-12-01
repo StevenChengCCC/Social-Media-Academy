@@ -1,14 +1,13 @@
 import React, { useEffect, useState } from 'react'
 import { generateClient } from 'aws-amplify/api'
-// 修复点：合并导入，确保 getCurrentUser 和 fetchAuthSession 在同一行，且不重复
 import { getCurrentUser, fetchAuthSession } from 'aws-amplify/auth'
 import { listContributions, listUserAnalytics } from '../graphql/queries'
 import { updateContribution, createSlangTerm } from '../graphql/mutations'
 import { BackToHomeLink } from '../App.jsx'
 
-const client = generateClient()
 
 export default function AdminDashboard({ lang }) {
+  const client = generateClient()
   const [isAdmin, setIsAdmin] = useState(false)
   const [requests, setRequests] = useState([])
   const [analyticsData, setAnalyticsData] = useState([])
@@ -25,21 +24,16 @@ export default function AdminDashboard({ lang }) {
     }
   }, [isAdmin, view])
 
-  // 核心修复：使用 fetchAuthSession 检查用户组权限
+  // ✅ 核心修复：检查用户组权限 (Admins)
   async function checkAdmin() {
     try {
-      // 1. 获取当前用户会话
       const session = await fetchAuthSession();
-
-      // 2. 从令牌中提取用户组
       const groups = session.tokens?.accessToken?.payload['cognito:groups'] || [];
 
-      // 3. 检查是否包含 'Admins' 组
       if (groups.includes('Admins')) {
         setIsAdmin(true);
-        fetchRequests(); // 加载审核请求
+        fetchRequests();
       } else {
-        // 如果不是管理员，强制拒绝
         setIsAdmin(false);
       }
     } catch (e) {
@@ -66,7 +60,7 @@ export default function AdminDashboard({ lang }) {
     try {
       const res = await client.graphql({
         query: listUserAnalytics,
-        variables: { limit: 100 } // 获取最近 100 条
+        variables: { limit: 100 }
       });
       setAnalyticsData(res.data.listUserAnalytics.items);
     } catch (e) {

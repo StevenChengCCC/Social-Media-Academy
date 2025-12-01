@@ -2,9 +2,7 @@ import React from 'react'
 import { YouTubeVideo, BackToHomeLink } from '../App.jsx'
 import { usePageTracking } from '../hooks/usePageTracking'
 
-// --- START: Localization Data for Instagram Page ---
 const locales = {
-  // ... (locales data remains unchanged) ...
   'en': {
     title: 'Instagram — Safety & Setup',
     lead: 'Private accounts, Sensitive Content Control, Quiet Mode, and Supervision for teens.',

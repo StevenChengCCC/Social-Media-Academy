@@ -1,4 +1,5 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react'
+import { usePageTracking } from '../hooks/usePageTracking'
 
 // --- START: Localization Data for Play Page ---
 const locales = {

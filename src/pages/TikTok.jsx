@@ -1,5 +1,6 @@
 import React from 'react'
 import { YouTubeVideo, BackToHomeLink } from '../App.jsx'
+import { usePageTracking } from '../hooks/usePageTracking'
 
 // --- START: Localization Data for TikTok Page ---
 const locales = {

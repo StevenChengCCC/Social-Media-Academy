@@ -1,9 +1,8 @@
 import React from 'react'
 import { YouTubeVideo, BackToHomeLink } from '../App.jsx'
+import { usePageTracking } from '../hooks/usePageTracking'
 
-// --- START: Localization Data for LinkedIn Page ---
 const locales = {
-  // ... (locales data remains unchanged) ...
   'en': {
     title: 'LinkedIn — Career-Safe Setup',
     lead: 'Control your public profile, search visibility, data sharing, and notification hygiene.',
@@ -85,7 +84,6 @@ const locales = {
     }
   }
 };
-// --- END: Localization Data for LinkedIn Page ---
 
 export default function LinkedIn({ lang }){
     usePageTracking('LinkedIn');
